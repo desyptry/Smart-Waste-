@@ -1,78 +1,116 @@
 @extends('officer.layout.app')
 
-@section('title', 'Dashboard')
-
 @section('content')
 
-{{-- CARD STATISTIK --}}
-<div class="grid grid-cols-4 gap-4 mb-6">
+@php
+$hour = date('H');
+if($hour < 12) $greeting = "Pagi";
+elseif($hour < 17) $greeting = "Siang";
+else $greeting = "Malam";
+@endphp
 
-    <div class="bg-green-200 p-4 rounded text-center">
-        <p class="text-xl font-bold">120</p>
-        <p>Total Warga</p>
-    </div>
+<!-- ================= HEADER FULL ================= -->
+<div class="grid grid-cols-1 gap-6 mb-6">
 
-    <div class="bg-green-200 p-4 rounded text-center">
-        <p class="text-xl font-bold">50</p>
-        <p>Total Setoran</p>
-    </div>
+    <!-- CARD UTAMA FULL -->
+    <div class="bg-[#2D333D] text-white p-6 rounded-2xl shadow flex justify-between">
 
-    <div class="bg-green-200 p-4 rounded text-center">
-        <p class="text-xl font-bold">10</p>
-        <p>Menunggu Verifikasi</p>
-    </div>
+        <div>
+            <h1 class="text-xl font-semibold">
+                Selamat {{ $greeting }}, 
+                <span class="font-bold">{{ auth()->user()->name ?? 'Officer' }}</span>
+            </h1>
 
-    <div class="bg-green-200 p-4 rounded text-center">
-        <p class="text-xl font-bold">Rp 200.000</p>
-        <p>Total Saldo</p>
-    </div>
+            <p class="text-gray-300 text-sm mt-1">
+                Petugas Lapangan • Sistem Monitoring Sampah
+            </p>
 
-</div>
-
-{{-- GRID BAWAH --}}
-<div class="grid grid-cols-2 gap-4">
-
-    {{-- AKTIVITAS TERBARU --}}
-    <div class="bg-white rounded shadow">
-
-        <div class="bg-green-300 p-2 font-semibold">
-            Aktivitas Terbaru
+            <div class="mt-5">
+                <p class="text-gray-400 text-sm">Total Pendapatan Hari Ini</p>
+                <h2 class="text-3xl font-bold">Rp 200.000,-</h2>
+            </div>
         </div>
 
-        <table class="w-full text-sm border border-gray-400 border-collapse">
-            <thead class="bg-green-200">
-                <tr>
-                    <th class="border p-2">Nama</th>
-                    <th class="border p-2">Sampah</th>
-                    <th class="border p-2">Berat</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="border p-2">Budi</td>
-                    <td class="border p-2">Plastik</td>
-                    <td class="border p-2">2 Kg</td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-
-    {{-- JADWAL --}}
-    <div class="bg-white rounded shadow">
-
-        <div class="bg-green-300 p-2 font-semibold">
-            Jadwal Pengambilan
+        <div class="flex flex-col items-end gap-4">
+            <x-mdi-bell-outline class="w-6 h-6 text-gray-300"/>
+            <img src="https://i.pravatar.cc/40" class="rounded-full">
         </div>
-
-        <ul class="p-4 text-sm space-y-2">
-            <li class="border-b pb-1">📅 10 Jan 2025 - Posko A</li>
-            <li class="border-b pb-1">📅 12 Jan 2025 - Posko B</li>
-            <li>📅 15 Jan 2025 - Posko C</li>
-        </ul>
 
     </div>
 
 </div>
+<!-- ================= STATISTIK ================= -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-6">
+
+    <div class="bg-white p-4 rounded-xl shadow text-center hover:scale-105 transition">
+        <p class="text-gray-500 text-sm">Warga Aktif</p>
+        <h2 class="text-xl font-bold text-[#2D333D] mt-1">120</h2>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl shadow text-center hover:scale-105 transition">
+        <p class="text-gray-500 text-sm">Total Sampah</p>
+        <h2 class="text-xl font-bold text-[#2D333D] mt-1">250 Kg</h2>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl shadow text-center hover:scale-105 transition">
+        <p class="text-gray-500 text-sm">Setoran Hari Ini</p>
+        <h2 class="text-xl font-bold text-[#2D333D] mt-1">35</h2>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl shadow text-center hover:scale-105 transition">
+        <p class="text-gray-500 text-sm">Perlu Verifikasi</p>
+        <h2 class="text-xl font-bold text-red-500 mt-1">8</h2>
+    </div>
+
+</div>
+
+<!-- ================= JADWAL ================= -->
+<div class="bg-white p-6 rounded-2xl shadow mb-6">
+    <h2 class="font-bold text-[#2D333D] mb-4">
+        Jadwal & Lokasi Pengumpulan
+    </h2>
+
+    <div class="space-y-4 text-sm">
+
+        @for($i = 0; $i < 1; $i++)
+        <div class="flex justify-between items-center border-b pb-3">
+
+            <div class="flex items-center gap-4 text-gray-600">
+                <x-mdi-calendar class="w-5 h-5 text-[#69C3C1]"/>
+                <span>Senin, 27 Maret 2026</span>
+
+                <x-mdi-clock-outline class="w-5 h-5 text-[#69C3C1] ml-4"/>
+                <span>08.00 - 09.00</span>
+
+                <x-mdi-map-marker class="w-5 h-5 text-[#69C3C1] ml-4"/>
+                <span>Balai Br. Ambengan</span>
+            </div>
+
+            <a href="#" class="text-[#69C3C1] font-semibold">Detail</a>
+
+        </div>
+        @endfor
+
+    </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<div class="bg-[#A8C5B5] p-6 rounded-2xl shadow flex justify-between items-center">
+
+    <div>
+        <h2 class="font-bold text-[#2D333D] text-lg">
+            Riwayat Pengumpulan Sampah
+        </h2>
+        <p class="text-sm text-gray-700">Periode: Maret 2026</p>
+    </div>
+
+    <div class="text-right">
+        <p class="text-sm text-gray-700">Total Pendapatan</p>
+        <h2 class="text-xl font-bold text-[#2D333D]">Rp10.000.000,00</h2>
+    </div>
+
+</div>
+
+
 
 @endsection

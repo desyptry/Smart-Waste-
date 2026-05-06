@@ -1,34 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Admin</title>
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
-<body class="bg-gray-300">
 
-<div class="flex min-h-screen">
+<body class="flex">
 
-    {{-- Sidebar --}}
     @include('admin.layout.sidebar')
 
-    {{-- Main --}}
-    <div class="flex-1">
-
-        {{-- Header --}}
-        <div class="bg-green-500 text-white px-6 py-3 font-semibold">
-            @yield('title')
-        </div>
-
-        {{-- Content --}}
-        <div class="p-6">
-            @yield('content')
-        </div>
-
+    <div class="flex-1 p-6 bg-gray-100">
+        @yield('content')
     </div>
 
-</div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    @stack('scripts')
 
 </body>
 </html>

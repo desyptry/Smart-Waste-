@@ -35,3 +35,6 @@ Route::prefix('user')->group(function(){
 
     Route::view('/katalog-sampah', 'user.katalog-sampah.index')->name('user.katalog-sampah');
 });
+Route::get('/admin/kategori', function () {
+    return view('admin.kategori.index');
+});
