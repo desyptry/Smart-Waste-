@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Petugas</title>
-
-  
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-300">
 

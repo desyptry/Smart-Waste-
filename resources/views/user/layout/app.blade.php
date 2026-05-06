@@ -2,24 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin</title>
+    <title>
+        @yield('page-title')
+    </title>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
     
 </head>
-<body class="bg-gray-300">
+<body class="bg-(--primary-bg)">
 
 <div class="flex min-h-screen">
 
     {{-- Sidebar --}}
-    @include('admin.layout.sidebar')
+    @include('user.layout.sidebar')
 
     {{-- Main --}}
     <div class="flex-1">
 
         {{-- Header --}}
-        <div class="bg-green-500 text-white px-6 py-3 font-semibold">
-            @yield('title')
-        </div>
+        <!-- <div class="bg-(--primary) text-white px-6 py-3 font-semibold"> -->
+            <!-- @yield('title') -->
+        <!-- </div> -->
 
         {{-- Content --}}
         <div class="p-6">
