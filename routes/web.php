@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->group(function () {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/user', 'admin.user.index')->name('admin.user');
+    Route::view('/kategori', 'admin.kategori.index')->name('admin.kategori');
     Route::view('/laporan', 'admin.laporan.index')->name('admin.laporan');
     Route::view('/konfigurasi', 'admin.konfigurasi.index')->name('admin.konfigurasi');
     Route::view('/posko', 'admin.posko.index')->name('admin.posko');
@@ -35,6 +36,6 @@ Route::prefix('user')->group(function(){
 
     Route::view('/katalog-sampah', 'user.katalog-sampah.index')->name('user.katalog-sampah');
 });
-Route::get('/admin/kategori', function () {
-    return view('admin.kategori.index');
-});
+// Route::get('/admin/kategori', function () {
+//     return view('admin.kategori.index');
+// });

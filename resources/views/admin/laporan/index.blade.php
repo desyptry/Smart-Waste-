@@ -7,7 +7,7 @@
 <div class="bg-white rounded shadow">
 
     {{-- Header --}}
-    <div class="bg-green-500 text-white px-4 py-2 font-semibold">
+    <div class="bg-(--primary) text-(--text-black) px-4 py-2 font-semibold">
         Laporan
     </div>
 
@@ -15,17 +15,17 @@
 
         {{-- Filter tanggal --}}
         <div class="grid grid-cols-2 gap-2 mb-3">
-            <input type="date" class="border p-2">
-            <input type="date" class="border p-2">
+            <input type="date" class=" p-2">
+            <input type="date" class=" p-2">
         </div>
 
-        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 mb-4">
+        <button class="bg-(--primary) hover:bg(--text-black)--primary) text-(--text-black) px-4 py-2 mb-4 rounded">
             Tampilkan
         </button>
 
         {{-- TABEL --}}
-        <table class="w-full text-sm border">
-            <thead class="bg-green-500 text-white">
+        <table class="w-full text-sm ">
+            <thead class="bg-(--primary) text-(--text-black)">
                 <tr>
                     <th class="p-2">Tanggal</th>
                     <th class="p-2">Nama</th>
@@ -35,7 +35,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="border-t hover:bg-gray-100">
+                <tr class=" hover:bg-gray-100">
                     <td class="p-2">01-01-2025</td>
                     <td class="p-2">Budi</td>
                     <td class="p-2">Plastik</td>
@@ -47,7 +47,7 @@
 
         {{-- BUTTON EXPORT --}}
         <div class="mt-4">
-            <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2">
+            <button class="bg-(--primary) hover:bg(--text-black)--primary) text-(--text-black) px-4 py-2">
                 Export / Cetak
             </button>
         </div>

@@ -35,6 +35,14 @@
                 </span>
             </a>
         </li>
+        <li>
+            <a href="{{route('admin.kategori')}}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+                <span class="link-text">Kelola Kategori</span>
+                <span class="link-icon hidden">
+                    <x-mdi-account-group class="w-6 h-6"/>
+                </span>
+            </a>
+        </li>
 
         <!-- Posko -->
         <li>

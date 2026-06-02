@@ -64,10 +64,10 @@
                 </p>
                 
                 <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-4">
-                    <a href="#" class="px-8 py-3 bg-[#69C3C1] hover:bg-[#58a8a6] text-white font-bold rounded-full transition-all shadow-lg shadow-cyan-100">
+                    <a href="{{route('daftar')}}" class="px-8 py-3 bg-[#69C3C1] hover:bg-[#58a8a6] text-white font-bold rounded-full transition-all shadow-lg shadow-cyan-100">
                         Mulai Mengolah Sampah
                     </a>
-                    <a href="#" class="px-8 py-3 bg-(--primary) hover:bg-[#a2c9aa] text-white font-bold rounded-full transition-all shadow-lg shadow-green-100">
+                    <a href="#about" class="px-8 py-3 bg-(--primary) hover:bg-[#a2c9aa] text-white font-bold rounded-full transition-all shadow-lg shadow-green-100">
                         Tentang Kami
                     </a>
                 </div>

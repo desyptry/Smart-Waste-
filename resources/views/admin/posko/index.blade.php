@@ -7,7 +7,7 @@
 <div class="bg-white rounded shadow">
 
     {{-- Header --}}
-    <div class="bg-green-500 text-white px-4 py-2 font-semibold">
+    <div class="bg-(--primary) text-(--text-black) px-4 py-2 font-semibold">
         Kelola Data Posko
     </div>
 
@@ -15,11 +15,11 @@
 
         {{-- FORM INPUT --}}
         <div class="grid grid-cols-2 gap-2 mb-3">
-            <input type="text" placeholder="Nama Posko" class="border p-2 rounded">
-            <input type="text" placeholder="Alamat" class="border p-2 rounded">
+            <input type="text" placeholder="Nama Posko" class=" p-2 rounded">
+            <input type="text" placeholder="Alamat" class=" p-2 rounded">
         </div>
 
-        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 mb-4 rounded">
+        <button class="bg-(--primary) hover:bg(--text-black)--primary) text-(--text-black) px-4 py-2 mb-4 rounded">
             Simpan
         </button>
 
@@ -32,9 +32,9 @@
         @endphp
 
         {{-- TABEL --}}
-        <table class="w-full text-sm border border-gray-400 border-collapse">
+        <table class="w-full text-sm  border-gray-400 border-collapse">
 
-            <thead class="bg-green-500 text-white">
+            <thead class="bg-(--primary) text-(--text-black)">
                 <tr>
                     <th class="p-2">Nama Posko</th>
                     <th class="p-2">Alamat</th>
@@ -45,14 +45,14 @@
 
             <tbody>
                 @foreach($poskos as $p)
-                <tr class="border-t hover:bg-gray-100">
+                <tr class=" hover:bg-gray-100">
 
                     <td class="p-2">{{ $p['nama'] }}</td>
 
                     <td class="p-2">{{ $p['alamat'] }}</td>
 
                     <td class="p-2">
-                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">
+                        <span class="b text-green-700 px-2 py-1 rounded text-xs">
                             {{ $p['petugas'] }} Petugas
                         </span>
                     </td>

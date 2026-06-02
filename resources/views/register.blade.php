@@ -68,7 +68,7 @@
 
             <p class="mt-8 text-center text-gray-500 font-semibold text-sm">
                 Sudah punya akun? 
-                <a href="" class="text-[#69C3C1] font-black hover:underline underline-offset-4 ml-1">Masuk</a>
+                <a href="{{route('login')}}" class="text-[#69C3C1] font-black hover:underline underline-offset-4 ml-1">Masuk</a>
             </p>
         </div>
 

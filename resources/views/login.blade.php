@@ -8,15 +8,6 @@
     <!-- Vite Directive (Menggantikan CDN) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <style>
-        /* Font Jakarta Sans biasanya diimport di app.css, 
-           tapi kita pastikan utility class ini tersedia */
-        .input-custom:focus {
-            background-color: white !important;
-            border-color: #69C3C1 !important;
-            box-shadow: 0 10px 20px -5px rgba(105, 195, 193, 0.2);
-        }
-    </style>
 </head>
 <body class="bg-[#F4F9FC] min-h-screen flex items-center justify-center p-6">
 
@@ -73,7 +64,7 @@
 
             <p class="mt-12 text-center text-gray-500 font-semibold text-sm">
                 Belum punya akun? 
-                <a href="" class="text-[#69C3C1] font-black hover:underline underline-offset-4 ml-1">Daftar Sekarang</a>
+                <a href="{{route('daftar')}}" class="text-[#69C3C1] font-black hover:underline underline-offset-4 ml-1">Daftar Sekarang</a>
             </p>
         </div>
 

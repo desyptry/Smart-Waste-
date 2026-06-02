@@ -7,7 +7,7 @@
 <div class="bg-white rounded shadow">
 
     {{-- HEADER --}}
-    <div class="bg-green-300 p-2 font-semibold">
+    <div class="bg-(--primary) p-2 font-semibold">
         Kelola Data Warga
     </div>
 
@@ -19,21 +19,21 @@
             <input type="text" placeholder="Alamat" class="border border-gray-400 p-2">
         </div>
 
-        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 mb-4">
+        <button class="bg-(--primary) hover:bg-green-600 text-(--text-black) px-4 py-2 mb-4">
             Simpan
         </button>
 
         {{-- GARIS PEMBATAS --}}
-        <hr class="my-4 border-gray-400">
+        <!-- <hr class="my-4 border-gray-400"> -->
 
         {{-- TABEL --}}
-        <table class="w-full border border-gray-400 border-collapse text-sm">
+        <table class="w-full border-collapse text-sm">
 
-            <thead class="bg-green-300">
+            <thead class="bg-(--primary)">
                 <tr>
-                    <th class="border p-2">Nama</th>
-                    <th class="border p-2">Alamat</th>
-                    <th class="border p-2">Aksi</th>
+                    <th class=" p-2">Nama</th>
+                    <th class=" p-2">Alamat</th>
+                    <th class=" p-2">Aksi</th>
                 </tr>
             </thead>
 
@@ -41,9 +41,9 @@
 
                 {{-- DATA DUMMY --}}
                 <tr class="hover:bg-gray-100">
-                    <td class="border p-2">Budi</td>
-                    <td class="border p-2">Buleleng</td>
-                    <td class="border p-2">
+                    <td class=" p-2">Budi</td>
+                    <td class=" p-2">Buleleng</td>
+                    <td class=" p-2">
                         <button class="bg-yellow-500 text-white px-2 py-1 mr-1">
                             Edit
                         </button>
@@ -54,9 +54,9 @@
                 </tr>
 
                 <tr class="hover:bg-gray-100">
-                    <td class="border p-2">Sari</td>
-                    <td class="border p-2">Denpasar</td>
-                    <td class="border p-2">
+                    <td class=" p-2">Sari</td>
+                    <td class=" p-2">Denpasar</td>
+                    <td class=" p-2">
                         <button class="bg-yellow-500 text-white px-2 py-1 mr-1">
                             Edit
                         </button>
@@ -67,9 +67,9 @@
                 </tr>
 
                 <tr class="hover:bg-gray-100">
-                    <td class="border p-2">Andi</td>
-                    <td class="border p-2">Singaraja</td>
-                    <td class="border p-2">
+                    <td class=" p-2">Andi</td>
+                    <td class=" p-2">Singaraja</td>
+                    <td class=" p-2">
                         <button class="bg-yellow-500 text-white px-2 py-1 mr-1">
                             Edit
                         </button>

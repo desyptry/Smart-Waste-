@@ -6,7 +6,7 @@
 
 <div class="bg-white rounded shadow">
 
-    <div class="bg-green-500 text-white px-4 py-2 font-semibold">
+    <div class="bg-(--primary) text-(--text-black) px-4 py-2 font-semibold">
         Kelola Kategori Sampah
     </div>
 
@@ -14,12 +14,12 @@
 
         {{-- FORM --}}
         <div class="grid grid-cols-3 gap-2 mb-3">
-            <input type="text" placeholder="Nama Kategori" class="border p-2 rounded">
-            <input type="number" placeholder="Harga / Kg" class="border p-2 rounded">
-            <input type="text" placeholder="Keterangan" class="border p-2 rounded">
+            <input type="text" placeholder="Nama Kategori" class=" p-2 rounded">
+            <input type="number" placeholder="Harga / Kg" class=" p-2 rounded">
+            <input type="text" placeholder="Keterangan" class=" p-2 rounded">
         </div>
 
-        <button class="bg-green-500 text-white px-4 py-2 mb-4 rounded">
+        <button class="bg-(--primary) hover:bg(--text-black)--primary) text-(--text-black) px-4 py-2 mb-4 rounded">
             Simpan
         </button>
 
@@ -32,9 +32,9 @@
         @endphp
 
         {{-- TABEL --}}
-        <table class="w-full text-sm border border-gray-400 border-collapse">
+        <table class="w-full text-sm border-collapse">
 
-            <thead class="bg-green-500 text-white">
+            <thead class="bg-(--primary) text-(--text-black)">
                 <tr>
                     <th class="p-2">Nama</th>
                     <th class="p-2">Harga</th>
@@ -45,7 +45,7 @@
 
             <tbody>
                 @foreach($kategori as $k)
-                <tr class="border-t hover:bg-gray-100">
+                <tr class="hover:bg-gray-100">
                     <td class="p-2">{{ $k['nama'] }}</td>
                     <td class="p-2">Rp {{ number_format($k['harga']) }}</td>
                     <td class="p-2">{{ $k['ket'] }}</td>

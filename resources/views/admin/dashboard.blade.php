@@ -73,17 +73,17 @@ else $greeting = "Malam";
 
         <div class="space-y-3 text-sm">
 
-            <div class="flex justify-between border-b pb-2">
+            <div class="flex justify-between  pb-2">
                 <span>User baru mendaftar</span>
                 <span class="text-gray-400">1 jam lalu</span>
             </div>
 
-            <div class="flex justify-between border-b pb-2">
+            <div class="flex justify-between  pb-2">
                 <span>Setoran sampah masuk</span>
                 <span class="text-gray-400">2 jam lalu</span>
             </div>
 
-            <div class="flex justify-between border-b pb-2">
+            <div class="flex justify-between  pb-2">
                 <span>Verifikasi berhasil</span>
                 <span class="text-gray-400">3 jam lalu</span>
             </div>
