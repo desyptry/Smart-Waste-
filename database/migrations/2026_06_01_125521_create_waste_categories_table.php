@@ -11,8 +11,9 @@ return new class extends Migration
         Schema::create('waste_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');               
-            $table->integer('price_per_kg');      
             $table->text('description')->nullable();
+            $table->string("photo");
+            $table->text("rules");
             $table->timestamps();
         });
     }

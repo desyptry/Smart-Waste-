@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');           // Nama posko
             $table->text('address');
+            $table->float("latitude");
+            $table->float('longitude');
             $table->timestamps();
         });
     }
