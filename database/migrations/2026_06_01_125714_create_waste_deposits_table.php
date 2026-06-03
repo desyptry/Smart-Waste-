@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('pickup_schedule_id')->nullable()->constrained('pickup_schedules'); // <-- tambah ini
             $table->decimal('weight_kg', 8, 2);
             $table->integer('total_price');
-            $table->enum('status', ['pending', 'verified', 'rejected'])->default('pending');
+            // $table->enum('status', ['pending', 'verified', 'rejected'])->default('pending');
             $table->foreignId('verified_by')->nullable()->constrained('users');
             $table->timestamp('deposit_date')->useCurrent();
             $table->timestamps();
