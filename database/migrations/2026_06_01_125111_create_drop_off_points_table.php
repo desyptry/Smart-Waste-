@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('drop_off_points', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('foreignKey')->nullable();
             $table->string('name');           // Nama posko
-            $table->text('address');
+            $table->text('location');       // Alamat atau deskripsi lokasi
             $table->float("latitude");
             $table->float('longitude');
             $table->timestamps();

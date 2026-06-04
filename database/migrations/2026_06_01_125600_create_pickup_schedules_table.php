@@ -6,20 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
+        
         Schema::create('pickup_schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('drop_off_point_id')->constrained();
-            $table->date('date');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->enum('status', ['akan_datang', 'sedang_berlangsung', 'selesai'])->default('akan_datang');
+            
+            $table->foreignId('officer_id')->constrained('officer_details')->onDelete('cascade');
+
+            $table->foreignId('collection_point_id')->constrained('drop_off_points')->onDelete('cascade');
+            
+            $table->dateTime('start_date');
+            $table->dateTime('finish_date');
+            
             $table->timestamps();
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('pickup_schedules');
     }
