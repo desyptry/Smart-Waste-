@@ -12,6 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('deposit_details', function (Blueprint $table) {
+          $table->foreignId('waste_deposit_id')->constrained('waste_deposits')->onDelete('cascade');
+          $table->foreignId('waste_price_id')->constrained('schedule_prices')->onDelete('cascade');
+            $table->decimal('weight_kg', 8, 2);
+            $table->integer('total_price');
             $table->id();
             $table->timestamps();
         });

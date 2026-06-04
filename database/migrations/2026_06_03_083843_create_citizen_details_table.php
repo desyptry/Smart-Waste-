@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('citizen_details', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->integer('balance');
             $table->timestamps();
         });
     }

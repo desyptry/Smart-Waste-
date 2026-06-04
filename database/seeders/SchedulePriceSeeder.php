@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\WastePriceSchedule;
+use App\Models\SchedulePrice;
 use App\Models\WasteCategory;
 use Illuminate\Database\Seeder;
 
-class WastePriceScheduleSeeder extends Seeder
+class SchedulePriceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -25,7 +25,7 @@ class WastePriceScheduleSeeder extends Seeder
         //Kita buat data harga jadwal sampah sebanyak 15 data
         // Kita timpa (override) 'waste_category_id' agar menggunakan ID kategori yang asli secara acak
         for ($i = 0; $i < 15; $i++) {
-            WastePriceSchedule::factory()->create([
+            SchedulePrice::factory()->create([
                 'waste_category_id' => $categories->random()->id,
             ]);
         }

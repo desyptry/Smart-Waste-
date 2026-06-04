@@ -2,15 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\WastePriceSchedule; // Sesuaikan jika namanya WastePriceScadule
+use App\Models\SchedulePrice; // Sesuaikan jika namanya WastePriceScadule
 use App\Models\PickupSchedule;
 use App\Models\WasteCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
-
-class WastePriceScheduleFactory extends Factory
+class SchedulePriceFactory extends Factory
 {
     
-    protected $model = WastePriceSchedule::class; 
+    protected $model = SchedulePrice::class; 
 
     public function definition(): array
     {

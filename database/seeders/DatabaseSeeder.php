@@ -25,7 +25,13 @@ class DatabaseSeeder extends Seeder
             WasteCategorySeeder::class,       // 2. Bikin Kategori Master (Plastik, Kaca, dll)
             DropOffPointSeeder::class,        // 3. Bikin Posko Induk (Manggarai, Tebet, dll)
             PickupScheduleSeeder::class,      // 4. Bikin Petugas & Jadwal Penjemputan
-            WastePriceScheduleSeeder::class,  // 5. Bikin Harga khusus berdasarkan Jadwal & Kategori
+            SchedulePriceSeeder::class,  // 5. Bikin Harga khusus berdasarkan Jadwal & Kategori
+               UserSeeder::class,
+            OfficerDetailSeeder::class,
+            CitizenDetailSeeder::class,
+            WasteDepositSeeder::class,
+            DepositDetailSeeder::class,
+            WithdrawalSeeder::class,
         ]);
     }
 }

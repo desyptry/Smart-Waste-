@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained(); // warga
+            $table->foreignId('user_id')->constrained('users'); // warga
             $table->foreignId('asessor_id')->constrained('users'); // petugas penilai
-            $table->decimal('amount', 15, 2);
+            $table->integer('amount');
             $table->enum('method', ['bank_transfer', 'e_wallet']);
             $table->string('account_name');      // nama bank atau e-wallet
             $table->string('account_number');    // nomor rekening atau HP
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->foreignId('verified_by')->nullable()->constrained('users'); // officer/admin
+            
             $table->timestamp('approved_at')->nullable();
             $table->timestamps();
 });

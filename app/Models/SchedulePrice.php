@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WastePriceSchedule extends Model
+class SchedulePrice extends Model
 {
     use HasFactory;
 
