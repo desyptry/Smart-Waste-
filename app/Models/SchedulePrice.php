@@ -14,11 +14,8 @@ class SchedulePrice extends Model
     protected $fillable = [
         'pickup_schedule_id',
         'waste_category_id',
-        'type_name',
         'price',
-        'rules',
-        'description',
-        'photo',
+
     ];
 
     

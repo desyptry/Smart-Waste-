@@ -26,25 +26,6 @@
             </a>
         </li>
 
-        <!-- DATA WARGA -->
-        <li>
-            <a href="/officer/warga" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
-                <span class="link-text">Data Warga</span>
-                <span class="link-icon hidden">
-                    <x-mdi-account-multiple class="w-6 h-6"/>
-                </span>
-            </a>
-        </li>
-
-        <!-- SETORAN -->
-        <li>
-            <a href="/officer/setoran" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
-                <span class="link-text">Setoran</span>
-                <span class="link-icon hidden">
-                    <x-mdi-database-plus class="w-6 h-6"/>
-                </span>
-            </a>
-        </li>
 
         <!-- JADWAL -->
         <li>
@@ -66,15 +47,6 @@
             </a>
         </li>
 
-        <!-- VERIFIKASI -->
-        <li>
-            <a href="/officer/verifikasi" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
-                <span class="link-text">Verifikasi</span>
-                <span class="link-icon hidden">
-                    <x-mdi-check-circle class="w-6 h-6"/>
-                </span>
-            </a>
-        </li>
 
     </ul>
 

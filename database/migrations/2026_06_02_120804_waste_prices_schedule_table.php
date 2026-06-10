@@ -15,11 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pickup_schedule_id')->constrained()->onDelete('cascade');
             $table->foreignId('waste_category_id')->constrained();
-            $table->string('type_name');
+            
             $table->integer('price'); 
-            $table->text('rules')->nullable(); 
-            $table->text('description')->nullable();
-            $table->string('photo')->nullable(); 
+
             
             $table->timestamps(); 
         });
