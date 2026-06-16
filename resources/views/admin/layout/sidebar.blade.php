@@ -28,15 +28,15 @@
 
         <!-- User -->
         <li>
-            <a href="/admin/user" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{ route('admin.user.index') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Kelola User</span>
                 <span class="link-icon hidden">
-                    <x-mdi-account-group class="w-6 h-6"/>
-                </span>
-            </a>
-        </li>
+                <x-mdi-account-group class="w-6 h-6"/>
+        </span>
+    </a>
+</li>
         <li>
-            <a href="{{route('admin.kategori')}}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{route('admin.kategori.index')}}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Kelola Kategori</span>
                 <span class="link-icon hidden">
                     <x-mdi-account-group class="w-6 h-6"/>

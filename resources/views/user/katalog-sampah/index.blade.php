@@ -26,35 +26,24 @@
 
         <!-- Grid Daftar Sampah -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            @php
-                // Data dummy untuk list sampah
-                $daftarSampah = [
-                    ['id' => 1, 'nama' => 'Botol Plastik PET', 'kategori' => 'Plastik', 'desc' => 'Botol minuman bening seperti air mineral.', 'img' => asset('images/kresek.jpg')],
-                    ['id' => 2, 'nama' => 'Kardus Bekas', 'kategori' => 'Kertas', 'desc' => 'Kardus coklat bersih, tidak terkena minyak atau air.', 'img' => asset('images/kresek.jpg')],
-                    ['id' => 3, 'nama' => 'Kaleng Aluminium', 'kategori' => 'Logam', 'desc' => 'Kaleng minuman ringan atau kemasan makanan.', 'img' => asset('images/kresek.jpg')],
-                    ['id' => 4, 'nama' => 'Kertas HVS', 'kategori' => 'Kertas', 'desc' => 'Kertas tulis, dokumen, atau buku bekas.', 'img' => asset('images/kresek.jpg')],
-                    ['id' => 5, 'nama' => 'Plastik HD Rigid', 'kategori' => 'Plastik', 'desc' => 'Botol sabun, sampo, atau botol deterjen.', 'img' => asset('images/kresek.jpg')],
-                    ['id' => 6, 'nama' => 'Besi Tua', 'kategori' => 'Logam', 'desc' => 'Sisa konstruksi atau barang rumah tangga berbahan besi.', 'img' => asset('images/kresek.jpg')],
-                ];
-            @endphp
 
             @foreach ($daftarSampah as $sampah)
             <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-shadow group">
                 <!-- Foto Sampah -->
                 <div class="h-48 w-full overflow-hidden relative">
-                    <img src="{{ $sampah['img'] }}" alt="{{ $sampah['nama'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <img src="{{ asset('images/' . $sampah['photo']) }}" alt="{{ $sampah['name'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute top-3 left-3">
-                        <span class="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-(--secondary) shadow-sm">
-                            {{ $sampah['kategori'] }}
-                        </span>
+                        {{-- <span class="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-(--secondary) shadow-sm">
+                            {{ $sampah['category'] }}
+                        </span> --}}
                     </div>
                 </div>
 
                 <!-- Konten Teks -->
                 <div class="p-5 flex flex-col flex-grow">
-                    <h3 class="font-bold text-lg text-gray-800 leading-tight mb-2">{{ $sampah['nama'] }}</h3>
+                    <h3 class="font-bold text-lg text-gray-800 leading-tight mb-2">{{ $sampah['name'] }}</h3>
                     <p class="text-sm text-gray-500 line-clamp-2 mb-6">
-                        {{ $sampah['desc'] }}
+                        {{ $sampah['description'] }}
                     </p>
 
                     <!-- Tombol Detail -->
