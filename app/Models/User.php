@@ -30,4 +30,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+  public function dropOffPoints(): HasMany
+    {
+        return $this->hasMany(DropOffPoint::class, 'assesor_id');
+    }
 }

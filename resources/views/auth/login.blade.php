@@ -5,16 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Smart Waste Bank Sampah</title>
     
-    <!-- Vite Directive (Menggantikan CDN) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
 </head>
 <body class="bg-[#F4F9FC] min-h-screen flex items-center justify-center p-6">
 
-    <!-- Login Card Container -->
     <div class="w-full max-w-5xl bg-white rounded-[3rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gray-100">
         
-        <!-- Sisi Kiri: Form Login (Referensi image_bd53ef.jpg) -->
         <div class="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center">
             <div class="mb-10">
                 <h1 class="text-4xl font-black text-slate-800 tracking-tight">Selamat Datang!</h1>
@@ -23,22 +19,24 @@
 
             <form id="login-form" action="{{ route('login') }}" method="POST" class="space-y-6">
                 @csrf
-                <!-- Email Field -->
+
                 <div class="space-y-1">
                     <label class="text-slate-800 font-black ml-1 uppercase text-[10px] tracking-[0.2em]">Alamat Email</label>
-                    <input type="email" name="email" required placeholder="nama@email.com" 
-                           class="input-custom w-full px-6 py-4 bg-[#F8FAFC] border-2 border-transparent rounded-2xl font-bold text-slate-700 outline-none transition-all duration-300">
+                    <input type="email" name="email" required placeholder="nama@email.com" value="{{ old('email') }}"
+                           class="input-custom w-full px-6 py-4 bg-[#F8FAFC] border-2 border-transparent rounded-2xl font-bold text-slate-700 outline-none transition-all duration-300 @error('email') border-red-500 @enderror">
+                    @error('email') <span class="text-red-500 text-xs font-bold ml-1">{{ $message }}</span> @enderror
                 </div>
 
-                <!-- Password Field -->
                 <div class="space-y-1">
                     <div class="flex justify-between items-center px-1">
                         <label class="text-slate-800 font-black uppercase text-[10px] tracking-[0.2em]">Kata Sandi</label>
-                        <a href="" class="text-[10px] font-bold text-[#69C3C1] hover:underline uppercase tracking-wider">Lupa sandi?</a>
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}" class="text-[10px] font-bold text-[#69C3C1] hover:underline uppercase tracking-wider">Lupa sandi?</a>
+                        @endif
                     </div>
                     <div class="relative">
                         <input type="password" id="password" name="password" required placeholder="••••••••" 
-                               class="input-custom w-full px-6 py-4 bg-[#F8FAFC] border-2 border-transparent rounded-2xl font-bold text-slate-700 outline-none transition-all duration-300">
+                               class="input-custom w-full px-6 py-4 bg-[#F8FAFC] border-2 border-transparent rounded-2xl font-bold text-slate-700 outline-none transition-all duration-300 @error('password') border-red-500 @enderror">
                         
                         <button type="button" id="toggle-password" class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#69C3C1] transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -47,15 +45,14 @@
                             </svg>
                         </button>
                     </div>
+                    @error('password') <span class="text-red-500 text-xs font-bold ml-1">{{ $message }}</span> @enderror
                 </div>
 
-                <!-- Remember Me -->
                 <div class="flex items-center px-1">
                     <input type="checkbox" name="remember" id="remember" class="w-4 h-4 text-[#69C3C1] border-gray-300 rounded focus:ring-[#69C3C1] cursor-pointer">
                     <label for="remember" class="ml-2 text-sm font-semibold text-gray-500 cursor-pointer">Ingat saya selama 30 hari</label>
                 </div>
 
-                <!-- Login Button -->
                 <button type="submit" 
                         class="w-full py-4 bg-[#69C3C1] hover:bg-[#58A8A6] text-white font-black text-lg rounded-2xl shadow-xl shadow-cyan-100 transform hover:-translate-y-1 transition-all duration-300 active:scale-95">
                     Masuk Sekarang
@@ -64,33 +61,26 @@
 
             <p class="mt-12 text-center text-gray-500 font-semibold text-sm">
                 Belum punya akun? 
-                <a href="{{route('daftar')}}" class="text-[#69C3C1] font-black hover:underline underline-offset-4 ml-1">Daftar Sekarang</a>
+                <a href="{{ route('register') }}" class="text-[#69C3C1] font-black hover:underline underline-offset-4 ml-1">Daftar Sekarang</a>
             </p>
         </div>
 
-        <!-- Sisi Kanan: Visual Branding (Sesuai style sidebar gelap) -->
         <div class="hidden md:flex w-1/2 bg-[#2D333D] items-center justify-center p-12 relative overflow-hidden">
-            <!-- Dekorasi Pattern Halus -->
             <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#69C3C1 1px, transparent 1px); background-size: 20px 20px;"></div>
-            
             <div class="relative z-10 text-center">
                 <img src="{{ asset('images/logo.png') }}" alt="Smart Waste Logo" class="w-64 mx-auto mb-8 transform hover:scale-105 transition-transform duration-500">
             </div>
         </div>
-
     </div>
 
-    <!-- Script menggunakan jQuery (Pastikan sudah di-import via Vite) -->
     <script type="module">
         $(document).ready(function() {
-            // Animasi Label Warna saat Fokus
             $('input').on('focus', function() {
                 $(this).closest('.space-y-1').find('label').addClass('text-[#69C3C1]');
             }).on('blur', function() {
                 $(this).closest('.space-y-1').find('label').removeClass('text-[#69C3C1]');
             });
 
-            // Toggle Show/Hide Password
             $('#toggle-password').on('click', function() {
                 const passInput = $('#password');
                 const isPassword = passInput.attr('type') === 'password';
@@ -98,7 +88,6 @@
                 $(this).toggleClass('text-[#69C3C1]');
             });
 
-            // Handle Submit Loading
             $('#login-form').on('submit', function() {
                 const $btn = $(this).find('button[type="submit"]');
                 $btn.prop('disabled', true).addClass('opacity-70 cursor-not-allowed');

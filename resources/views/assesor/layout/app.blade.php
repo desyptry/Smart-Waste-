@@ -13,7 +13,7 @@
 <div class="flex min-h-screen">
 
     {{-- Sidebar --}}
-    @include('user.layout.sidebar')
+    @include('assesor.layout.sidebar')
 
     {{-- Main --}}
     <div class="flex-1">

@@ -9,7 +9,7 @@
             <p class="text-gray-400 text-xs font-medium mt-1">Kelola waktu operasional dan titik kumpul drop-off petugas</p>
         </div>
         
-        <a href="{{route('officer.jadwal.create')}}" class="flex items-center gap-2 px-6 py-3 bg-[#69C3C1] hover:bg-[#58A8A6] text-white font-black text-sm rounded-xl shadow-lg shadow-cyan-900/20 transition-all transform hover:-translate-y-0.5 active:scale-95">
+        <a href="{{ route('officer.jadwal.create') }}" class="flex items-center gap-2 px-6 py-3 bg-[#69C3C1] hover:bg-[#58A8A6] text-white font-black text-sm rounded-xl shadow-lg shadow-cyan-900/20 transition-all transform hover:-translate-y-0.5 active:scale-95">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
             </svg>
@@ -18,7 +18,16 @@
     </div>
 
     <div class="p-6 md:p-8">
-        {{-- TABEL DATA (Disesuaikan dengan field Migration: pickup_schedules) --}}
+        {{-- Notifikasi Sukses --}}
+        @if(session('success'))
+            <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl font-semibold text-sm flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm">
             <table class="w-full text-sm border-collapse text-left bg-white">
                 <thead>
@@ -31,48 +40,51 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    {{-- Contoh Baris Data 1 --}}
-                    <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="p-4 font-bold text-slate-500 pl-6">1</td>
-                        <td class="p-4 font-black text-slate-800">Drop-Off Point Utama</td>
-                        <td class="p-4 font-semibold text-gray-600">12 Juni 2026, 08:00</td>
-                        <td class="p-4 font-semibold text-gray-600">12 Juni 2026, 12:00</td>
-                        <td class="p-4 text-center pr-6">
-                            <div class="flex items-center justify-center gap-2">
-                                <a href="#" class="bg-[#F4F9FC] hover:bg-[#69C3C1] text-[#69C3C1] hover:text-white px-4 py-2 rounded-xl font-black text-xs transition-all border border-transparent hover:border-[#69C3C1] shadow-sm flex items-center gap-1.5">
-                                    Kelola
-                                </a>
-                                <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded-xl font-bold text-xs transition-all">
-                                    Edit
-                                </button>
-                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-xl font-bold text-xs transition-all">
-                                    Hapus
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    {{-- Contoh Baris Data 2 --}}
-                    <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="p-4 font-bold text-slate-500 pl-6">2</td>
-                        <td class="p-4 font-black text-slate-800">Gudang Logistik Sektor B</td>
-                        <td class="p-4 font-semibold text-gray-600">13 Juni 2026, 09:00</td>
-                        <td class="p-4 font-semibold text-gray-600">13 Juni 2026, 15:00</td>
-                        <td class="p-4 text-center pr-6">
-                            <div class="flex items-center justify-center gap-2">
-                                <a href="#" class="bg-[#F4F9FC] hover:bg-[#69C3C1] text-[#69C3C1] hover:text-white px-4 py-2 rounded-xl font-black text-xs transition-all border border-transparent hover:border-[#69C3C1] shadow-sm flex items-center gap-1.5">
-                                    Kelola
-                                </a>
-                                <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded-xl font-bold text-xs transition-all">
-                                    Edit
-                                </button>
-                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-xl font-bold text-xs transition-all">
-                                    Hapus
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
+    @forelse($pickup_schedules as $schedule)
+        <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="p-4 font-bold text-slate-500 pl-6">{{ $loop->iteration }}</td>
+            
+            <td class="p-4 font-black text-slate-800">
+                {{ $schedule->dropOffPoint->name ?? $schedule->dropOffPoint->nama_titik ?? 'Titik Tidak Diketahui' }}
+            </td>
+            
+            <td class="p-4 font-semibold text-gray-600">
+                {{ \Carbon\Carbon::parse($schedule->start_date)->translatedFormat('d F Y, H:i') }}
+            </td>
+            <td class="p-4 font-semibold text-gray-600">
+                {{ \Carbon\Carbon::parse($schedule->finish_date)->translatedFormat('d F Y, H:i') }}
+            </td>
+            
+            <td class="p-4 text-center pr-6">
+                <div class="flex items-center justify-center gap-2">
+                    {{-- TOMBOL KELOLA: Sekarang mengarah dinamis ke halaman detail sub-menu --}}
+                    <a href="{{ route('officer.jadwal.detail', $schedule->id) }}" class="bg-[#F4F9FC] hover:bg-[#69C3C1] text-[#69C3C1] hover:text-white px-4 py-2 rounded-xl font-black text-xs transition-all border border-transparent hover:border-[#69C3C1] shadow-sm flex items-center gap-1.5">
+                        Kelola
+                    </a>
+                    
+                    <a href="{{ route('officer.jadwal.edit', $schedule->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded-xl font-bold text-xs transition-all block">
+                        Edit
+                    </a>
+                    
+                    {{-- FORM HAPUS: Mengarah ke rute delete yang mengeksekusi method destroy() --}}
+                    <form action="{{ route('officer.jadwal.delete', $schedule->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')" class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-xl font-bold text-xs transition-all">
+                            Hapus
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="5" class="p-8 text-center text-gray-400 font-medium">
+                Belum ada jadwal pengumpulan sampah saat ini.
+            </td>
+        </tr>
+    @endforelse
+</tbody>
             </table>
         </div>
     </div>

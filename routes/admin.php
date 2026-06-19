@@ -18,7 +18,7 @@ use App\Http\Controllers\UserController;
 });// Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::resource('/kategori', WasteCategoryController::class)->except(['show'])->names('admin.kategori');
 // });
-    Route::delete('/kategori/{kategori}', [WasteCategoryController::class, 'destroy'])->name('admin.kategori.destroy');
+    // Route::delete('/kategori/{kategori}', [WasteCategoryController::class, 'destroy'])->name('admin.kategori.destroy');
     Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/kategori', [WasteCategoryController::class, 'index'])->name('kategori.index');
     Route::post('/kategori', [WasteCategoryController::class, 'store'])->name('kategori.store');

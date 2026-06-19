@@ -18,7 +18,8 @@ return new class extends Migration
             
             $table->dateTime('start_date');
             $table->dateTime('finish_date');
-            
+            $table->enum('status', ['not-verified', 'verified' , 'declined' ])->default('not-verified');
+          $table->string('declined_reason')->nullable();
             $table->timestamps();
         });
     }

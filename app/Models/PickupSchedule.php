@@ -11,22 +11,21 @@ class PickupSchedule extends Model
 {
     use HasFactory;
 
-    
     protected $table = 'pickup_schedules';
 
-    
     protected $fillable = [
         'officer_id',
         'collection_point_id',
         'start_date',
         'finish_date',
+  'status',
+  'declined_reason'
     ];
 
-    
-    public function collectionPoint(): BelongsTo
+    // Diubah menjadi dropOffPoint (tunggal) karena belongsTo hanya mengembalikan 1 objek lokasi
+    public function dropOffPoint(): BelongsTo
     {
-        
-        return $this->belongsTo(CollectionPoint::class, 'collection_point_id');
+        return $this->belongsTo(DropOffPoint::class, 'collection_point_id');
     }
 
     public function officer(): BelongsTo
@@ -34,10 +33,8 @@ class PickupSchedule extends Model
         return $this->belongsTo(OfficerDetail::class, 'officer_id');
     }
 
-   
-    public function wastePriceSchedules(): HasMany
+    public function schedulePrices(): HasMany
     {
-        
-        return $this->hasMany(WastePriceSchedule::class, 'pickup_schedule_id');
+        return $this->hasMany(SchedulePrice::class, 'pickup_schedule_id');
     }
 }

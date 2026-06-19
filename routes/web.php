@@ -1,13 +1,42 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+  Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // UPDATE: Berikan dua nama agar dibaca aman oleh Breeze maupun Controller Anda
+    Route::get('/user/dashboard', function () {
+        return view('citizen.dashboard');
+    })->name('dashboard')->name('citizen.dashboard'); 
+
+    // Dashboard untuk Officer
+    Route::get('/officer/dashboard', function () {
+        return view('officer.dashboard');
+    })->name('officer.dashboard');
+
+    // Dashboard untuk Admin
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+    // Dashboard untuk Assesor
+    Route::get('/assesor/dashboard', function () {
+        return view('assesor.dashboard');
+    })->name('assesor.dashboard');
+
+});
 
 
-Route::view('/', 'welcome');
-Route::view('login', 'login')->name('login');
-Route::view('daftar', 'register')->name('daftar');
-
-// Route::get('/admin/kategori', function () {
-//     return view('admin.kategori.index');
-// });
+require __DIR__.'/auth.php';

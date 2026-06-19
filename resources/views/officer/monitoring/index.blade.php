@@ -1,6 +1,6 @@
 @extends('officer.layout.app')
 
-@section('title', 'Monitoring')
+@section('title', 'Monitoring dan Laporan')
 
 @section('content')
 

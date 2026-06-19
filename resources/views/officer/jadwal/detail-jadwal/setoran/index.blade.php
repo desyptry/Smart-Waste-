@@ -10,9 +10,16 @@
             <p class="text-xs font-semibold text-gray-400 mt-0.5">Buat sesi setoran baru dan masukkan kuantitas timbangan beberapa komoditas sekaligus</p>
         </div>
 
-        <form id="deposit-multiform" action="#" method="POST" class="space-y-8">
+        {{-- Notifikasi Error/Sukses Flash --}}
+        @if(session('error'))
+            <div class="p-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl font-semibold text-sm">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        <form id="deposit-multiform" action="{{ route('officer.jadwal.detail.setoran.store', $schedule->id) }}" method="POST" class="space-y-8">
             @csrf
-            
+            @method('POST')
             {{-- SECTION 1: DATA INDUK SETORAN (waste_deposits) --}}
             <div class="bg-[#F4F9FC] p-6 rounded-3xl border border-gray-50 space-y-4">
                 <div class="flex items-center gap-2 pb-2 border-b border-gray-200/60">
@@ -23,15 +30,20 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-1.5">
                         <label class="text-slate-800 font-black ml-1 uppercase text-[10px] tracking-[0.2em]">Pilih Nasabah (Masyarakat)</label>
-                        <select name="user_id" required class="w-full px-5 py-4 bg-white rounded-2xl font-bold text-slate-700 border-2 border-transparent outline-none focus:border-[#69C3C1]">
+                        <select name="user_id" required class="w-full px-5 py-4 bg-white rounded-2xl font-bold text-slate-700 border-2 border-transparent outline-none focus:border-[#69C3C1] @error('user_id') border-red-400 @enderror">
                             <option value="" disabled selected>Cari nama nasabah...</option>
-                            {{-- Loop data users dari controller --}}
-                            <option value="1">Andi Wijaya (Nasabah - 081234xxx)</option>
-                            <option value="2">Siti Rahma (Nasabah - 085678xxx)</option>
+                            @foreach($nasabahList as $nasabah)
+                                <option value="{{ $nasabah->id }}" {{ old('user_id') == $nasabah->id ? 'selected' : '' }}>
+                                    {{ $nasabah->name }} ({{ $nasabah->phone_number ?? 'No Telp' }})
+                                </option>
+                            @endforeach
                         </select>
+                        @error('user_id')
+                            <p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <input type="hidden" name="pickup_schedule_id" value="1"> <input type="hidden" name="drop_off_point_id" value="1">  <input type="hidden" name="officer_id" value="{{ auth()->id() }}"> <div class="space-y-1.5">
+                    <div class="space-y-1.5">
                         <label class="text-slate-800 font-black ml-1 uppercase text-[10px] tracking-[0.2em]">Tanggal Setoran</label>
                         <input type="text" disabled value="Hari ini (Otomatis)" class="w-full px-5 py-4 bg-gray-100/70 rounded-2xl font-bold text-gray-500 border-2 border-transparent outline-none">
                     </div>
@@ -55,20 +67,23 @@
                 </div>
 
                 <div id="items-container" class="space-y-3">
-                    
+                    {{-- Row Utama Pertama (Index 0) --}}
                     <div class="item-row grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-white p-4 rounded-2xl border-2 border-gray-100 transition-all">
                         <div class="md:col-span-5 space-y-1">
-                            <label class="text-[9px] font-black uppercase text-gray-400 tracking-wider">Komoditas & Harga</label>
+                            <label class="text-[9px] font-black uppercase text-gray-400 tracking-wider">Komoditas & Harga Berjalan</label>
                             <select name="items[0][waste_price_id]" required class="waste-select w-full px-4 py-3 bg-[#F8FAFC] rounded-xl font-bold text-slate-700 outline-none border-2 border-transparent focus:bg-white focus:border-[#69C3C1]">
                                 <option value="" disabled selected>Pilih komoditas...</option>
-                                <option value="1" data-price="3500">Plastik Botol — (Rp 3.500/Kg)</option>
-                                <option value="2" data-price="1800">Kardus / Kertas — (Rp 1.800/Kg)</option>
+                                @foreach($availablePrices as $price)
+                                    <option value="{{ $price->id }}" data-price="{{ $price->price }}">
+                                        {{ $price->wasteCategory->name }} — (Rp {{ number_format($price->price, 0, ',', '.') }}/Kg)
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
 
                         <div class="md:col-span-3 space-y-1">
                             <label class="text-[9px] font-black uppercase text-gray-400 tracking-wider">Berat (Kg)</label>
-                            <input type="number" step="0.01" name="items[0][weight_kg]" required placeholder="0.00" class="weight-input w-full px-4 py-3 bg-[#F8FAFC] rounded-xl font-bold text-slate-700 outline-none border-2 border-transparent focus:bg-white focus:border-[#69C3C1]">
+                            <input type="number" step="0.01" min="0.01" name="items[0][weight_kg]" required placeholder="0.00" class="weight-input w-full px-4 py-3 bg-[#F8FAFC] rounded-xl font-bold text-slate-700 outline-none border-2 border-transparent focus:bg-white focus:border-[#69C3C1]">
                         </div>
 
                         <div class="md:col-span-3 space-y-1">
@@ -85,10 +100,10 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
+            {{-- FOOTER KALKULASI --}}
             <div class="pt-4 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div class="text-center sm:text-left">
                     <p class="text-xs font-black text-gray-400 uppercase tracking-widest">Akumulasi Seluruh Item</p>
@@ -96,7 +111,7 @@
                 </div>
                 
                 <div class="flex gap-3 w-full sm:w-auto">
-                    <button type="button" class="w-full sm:w-auto px-6 py-4 bg-gray-100 hover:bg-gray-200 text-slate-600 font-black text-sm rounded-2xl transition-all">
+                    <button type="button" id="reset-form-btn" class="w-full sm:w-auto px-6 py-4 bg-gray-100 hover:bg-gray-200 text-slate-600 font-black text-sm rounded-2xl transition-all">
                         Reset Form
                     </button>
                     <button type="submit" class="w-full sm:w-auto px-10 py-4 bg-[#2D333D] hover:bg-slate-800 text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-xl transition-all active:scale-95">
@@ -108,26 +123,34 @@
         </form>
     </div>
 
-    {{-- LOGIKA INTERAKTIF FORM JQUERY --}}
+    {{-- LOGIKA INTERAKTIF JQUERY --}}
     <script type="module">
         $(document).ready(function() {
             let rowIndex = 1;
 
-            // Template HTML untuk penambahan baris baru
+            // Masukkan data komoditas dari Blade ke variabel JavaScript sebagai master opsi dropdown
+            const dropdownOptions = `
+                <option value="" disabled selected>Pilih komoditas...</option>
+                @foreach($availablePrices as $price)
+                    <option value="{{ $price->id }}" data-price="{{ $price->price }}">
+                        {{ $price->wasteCategory->name }} — (Rp {{ number_format($price->price, 0, ',', '.') }}/Kg)
+                    </option>
+                @endforeach
+            `;
+
+            // Pembuat template baris HTML baru
             function createRowHtml(index) {
                 return `
                 <div class="item-row grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-white p-4 rounded-2xl border-2 border-gray-100 transition-all opacity-0 scale-95 duration-200">
                     <div class="md:col-span-5 space-y-1">
-                        <label class="text-[9px] font-black uppercase text-gray-400 tracking-wider">Komoditas & Harga</label>
+                        <label class="text-[9px] font-black uppercase text-gray-400 tracking-wider">Komoditas & Harga Berjalan</label>
                         <select name="items[${index}][waste_price_id]" required class="waste-select w-full px-4 py-3 bg-[#F8FAFC] rounded-xl font-bold text-slate-700 outline-none border-2 border-transparent focus:bg-white focus:border-[#69C3C1]">
-                            <option value="" disabled selected>Pilih komoditas...</option>
-                            <option value="1" data-price="3500">Plastik Botol — (Rp 3.500/Kg)</option>
-                            <option value="2" data-price="1800">Kardus / Kertas — (Rp 1.800/Kg)</option>
+                            ${dropdownOptions}
                         </select>
                     </div>
                     <div class="md:col-span-3 space-y-1">
                         <label class="text-[9px] font-black uppercase text-gray-400 tracking-wider">Berat (Kg)</label>
-                        <input type="number" step="0.01" name="items[${index}][weight_kg]" required placeholder="0.00" class="weight-input w-full px-4 py-3 bg-[#F8FAFC] rounded-xl font-bold text-slate-700 outline-none border-2 border-transparent focus:bg-white focus:border-[#69C3C1]">
+                        <input type="number" step="0.01" min="0.01" name="items[${index}][weight_kg]" required placeholder="0.00" class="weight-input w-full px-4 py-3 bg-[#F8FAFC] rounded-xl font-bold text-slate-700 outline-none border-2 border-transparent focus:bg-white focus:border-[#69C3C1]">
                     </div>
                     <div class="md:col-span-3 space-y-1">
                         <label class="text-[9px] font-black uppercase text-gray-400 tracking-wider">Subtotal Rupiah</label>
@@ -144,7 +167,7 @@
                 </div>`;
             }
 
-            // Fungsi Hitung Total Keseluruhan (Grand Total)
+            // Hitung Subtotal per baris & Kalkulasi Grand Total Keseluruhan
             function calculateInvoice() {
                 let grandTotal = 0;
 
@@ -164,12 +187,11 @@
                 $('#grand-total-display').text('Rp ' + grandTotal.toLocaleString('id-ID'));
             }
 
-            // Aksi Tambah Baris Baru
+            // Tambah baris baru
             $('#add-row-btn').on('click', function() {
                 const newRow = $(createRowHtml(rowIndex));
                 $('#items-container').append(newRow);
                 
-                // Animasi masuk halus
                 setTimeout(() => {
                     newRow.removeClass('opacity-0 scale-95');
                 }, 50);
@@ -178,7 +200,7 @@
                 toggleRemoveButtons();
             });
 
-            // Aksi Hapus Baris
+            // Hapus baris timbangan
             $(document).on('click', '.remove-row-btn', function() {
                 const row = $(this).closest('.item-row');
                 row.addClass('opacity-0 scale-95');
@@ -189,16 +211,26 @@
                 }, 200);
             });
 
-            // Trigger Kalkulasi Otomatis saat input/select berubah
+            // Hitung otomatis saat kolom input diubah
             $(document).on('input change', '.weight-input, .waste-select', function() {
                 calculateInvoice();
             });
 
-            // Validasi proteksi agar baris pertama tidak bisa dihapus jika tinggal 1
             function toggleRemoveButtons() {
                 const rowsCount = $('.item-row').length;
                 $('.remove-row-btn').prop('disabled', rowsCount <= 1);
             }
+
+            // Reset seluruh form ke kondisi awal
+            $('#reset-form-btn').on('click', function() {
+                if(confirm('Apakah Anda yakin ingin mengosongkan form timbangan ini?')) {
+                    $('#deposit-multiform')[0].reset();
+                    $('#items-container').html(createRowHtml(0)); 
+                    rowIndex = 1;
+                    calculateInvoice();
+                    toggleRemoveButtons();
+                }
+            });
         });
     </script>
 @endsection
