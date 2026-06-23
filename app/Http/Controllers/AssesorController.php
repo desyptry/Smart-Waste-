@@ -2,31 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PickupSchedule;
 use App\Models\Withdrawal;
-use App\Models\PickupSchedule; // Sesuaikan dengan nama model jadwal penjemputan Anda
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class AssesorController extends Controller
 {
     public function index()
     {
-        // 1. Jumlah penarikan (withdrawal) yang belum diapprove (status pending)
+        // 1. Hitung Penarikan Belum Diapprove (Status: pending)
         $pendingWithdrawalsCount = Withdrawal::where('status', 'pending')->count();
 
-        // 2. Jumlah transaksi withdrawal yang sukses/approved dalam hari ini
+        // 2. Hitung Withdrawal Selesai Hari Ini (Status: approved, tanggal hari ini)
         $todayApprovedWithdrawalsCount = Withdrawal::where('status', 'approved')
-            ->whereDate('approved_at', Carbon::today())
+            ->whereDate('updated_at', Carbon::today())
             ->count();
 
-        // 3. Jumlah jadwal yang belum diapproved (status pending)
-        // Sesuaikan 'status' dengan nama kolom verifikasi pada model jadwal Anda
+        // 3. Hitung Jadwal Belum Diapprove (Status: pending)
         $pendingSchedulesCount = PickupSchedule::where('status', 'pending')->count();
+
+        // 4. Ambil Daftar Antrean Jadwal Terkini (Maksimal 5 data terlama/terkini yang pending)
+        $recentSchedules = PickupSchedule::with('dropOffPoint')
+            ->where('status', 'not-verified')
+            ->orderBy('updated_at', 'asc')
+            ->take(5)
+            ->get();
 
         return view('assesor.dashboard', compact(
             'pendingWithdrawalsCount',
             'todayApprovedWithdrawalsCount',
-            'pendingSchedulesCount'
+            'pendingSchedulesCount',
+            'recentSchedules'
         ));
     }
 }

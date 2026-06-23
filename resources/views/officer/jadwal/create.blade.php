@@ -19,25 +19,19 @@
     <div class="p-8 md:p-10">
         <form id="create-schedule-form" action="{{ route('officer.jadwal.store') }}" method="POST" class="space-y-6">
             @csrf
-            {{-- Bagian Drop-Off Point (Sudah diperbaiki dari variabel typo & tag bocor) --}}
             <div class="space-y-2">
                 <label class="text-slate-800 font-black ml-1 uppercase text-[10px] tracking-[0.2em]">Titik Kumpul / Drop-Off Point</label>
-                
-                {{-- Dibuat disabled agar user tidak bisa memanipulasi lokasi petugas lain --}}
-                <select class="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl font-bold text-slate-500 outline-none cursor-not-allowed" disabled>
-                    @if($dropOffPoint)
-                        <option value="{{ $dropOffPoint->id }}" selected>
-                            {{ $dropOffPoint->name ?? $dropOffPoint->nama_titik }}
+        
+                <select name="collection_point_id" required class="w-full px-6 py-4 bg-[#F8FAFC] border-2 @error('collection_point_id') border-red-400 @else border-transparent @enderror rounded-2xl font-bold text-slate-700 outline-none transition-all duration-300 focus:bg-white focus:border-[#69C3C1] focus:ring-4 focus:ring-[#69C3C1]/10">
+                    <option value="" disabled {{ old('collection_point_id') ? '' : 'selected' }}>Pilih Titik Kumpul Penugasan...</option>
+                    @forelse($dropOffPoints as $point)
+                        <option value="{{ $point->dropOffPoint->id }}" {{ old('collection_point_id') == $point->dropOffPoint->id ? 'selected' : '' }}>
+                            {{ $point->dropOffPoint->name }} {{ $point->dropOffPoint->location  }}
                         </option>
-                    @else
-                        <option value="" selected>Anda belum ditempatkan di titik kumpul manapun</option>
-                    @endif
+                    @empty
+                        <option value="" disabled>Tidak ada lokasi titik kumpul yang tersedia</option>
+                    @endforelse
                 </select>
-
-                {{-- Hidden input dikirim agar $_POST['collection_point_id'] tetap masuk ke Request saat submit --}}
-                @if($dropOffPoint)
-                    <input type="hidden" name="collection_point_id" value="{{ $dropOffPoint->id }}">
-                @endif
 
                 @error('collection_point_id')
                     <p class="text-red-500 text-xs font-semibold ml-1 mt-1">{{ $message }}</p>
@@ -68,14 +62,6 @@
                 </div>
             </div>
 
-            <div class="bg-[#F4F9FC] p-4 rounded-2xl flex items-start gap-3 border border-gray-100">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#69C3C1] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p class="text-xs font-semibold text-slate-600 leading-relaxed">
-                    Kategori harga sampah untuk jadwal ini dapat diatur secara spesifik setelah jadwal berhasil disimpan dengan menekan tombol <strong class="text-slate-800">"Kelola Harga"</strong> pada tabel utama.
-                </p>
-            </div>
 
             <div class="pt-4 flex justify-end gap-4">
                 <a href="{{ route('officer.jadwal') }}" class="px-6 py-4 bg-gray-100 hover:bg-gray-200 text-slate-600 font-black text-sm rounded-2xl transition-all flex items-center justify-center">

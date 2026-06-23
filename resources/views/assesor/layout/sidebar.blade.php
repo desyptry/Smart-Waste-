@@ -18,7 +18,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('assesor.monitoring') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{ route('assesor.laporan') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Monitoring & Laporan</span>
                 <span class="link-icon hidden"><x-mdi-monitor-dashboard class="w-6 h-6"/></span>
             </a>

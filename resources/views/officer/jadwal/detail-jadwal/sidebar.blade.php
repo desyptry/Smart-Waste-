@@ -39,7 +39,7 @@
     </a>
 
     {{-- 4. Riwayat Timbangan --}}
-    <a href="{{route('officer.jadwal.detail.riwayat',$schedule->id)}}" class="px-6 py-3 font-black text-sm tracking-wider uppercase rounded-t-2xl transition-all border-b-4 border-transparent text-gray-400 hover:text-slate-700">
+    <a href="{{route('officer.jadwal.detail.riwayat',$schedule->id)}}" class="px-6 py-3 font-black text-sm tracking-wider uppercase rounded-t-2xl transition-all border-b-4 {{ Request::routeIs('officer.jadwal.detail.riwayat') ? 'border-[#69C3C1] text-[#69C3C1]' : 'border-transparent text-gray-400 hover:text-slate-700' }}">
         Riwayat Timbangan
     </a>
 </div>

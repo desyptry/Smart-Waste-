@@ -9,7 +9,7 @@ use App\Models\SchedulePrice;
 use App\Models\WasteDeposit;
 use App\Models\DepositDetail;
 
-use App\Http\Requests\PickupScheduleRequest; // Perbaikan namespace request
+use App\Http\Requests\PickupScheduleRequest; 
 use App\Http\Requests\WasteDepositRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,13 +19,10 @@ class PickupScheduleController extends Controller
 {
     public function index()
     {
-        $userId = 2; // Nanti diganti jadi auth()->id()
-        
-        // 1. Cari dulu detail record petugas berdasarkan user_id yang login
-        $officerDetail = OfficerDetail::where('user_id', $userId)->firstOrFail();
+        // 1. Ambil detail record petugas berdasarkan ID user yang sedang login
+        $officerDetail = OfficerDetail::where('user_id', auth()->id())->firstOrFail();
 
-        // 2. Cari jadwal berdasarkan officer_id (ID dari tabel officer_details)
-        // Gunakan eager loading 'dropOffPoint' (tanpa 's' sesuai nama relasi belongsTo di model)
+        // 2. Ambil jadwal berdasarkan officer_id (ID dari tabel officer_details)
         $pickup_schedules = PickupSchedule::with('dropOffPoint')
                             ->where("officer_id", $officerDetail->id) 
                             ->get();
@@ -35,70 +32,118 @@ class PickupScheduleController extends Controller
 
     public function create()
     {
-        $userId = 2; // Nanti diganti jadi auth()->id()
+        // Ambil data detail petugas beserta titik kumpulnya berdasarkan user yang login
+        $dropOffPoints = OfficerDetail::with('dropOffPoint')
+                            ->where('user_id', auth()->id())
+                            ->get();
 
-        $officerDetail = OfficerDetail::with('dropOffPoint')
-                            ->where('user_id', $userId)
-                            ->firstOrFail();
+        // $dropOffPoint = $officerDetail->dropOffPoint;
 
-        $dropOffPoint = $officerDetail->dropOffPoint;
-
-        return view('officer.jadwal.create', compact('dropOffPoint'));
+        return view('officer.jadwal.create', compact('dropOffPoints'));
     }
 
-    public function store(PickupScheduleRequest $request)
+public function store(PickupScheduleRequest $request)
     {
-        $userId = 2; // Nanti diganti jadi auth()->id()
-        
-        $officerDetail = OfficerDetail::where('user_id', $userId)->firstOrFail();
+        $officerDetail = OfficerDetail::where('user_id', auth()->id())->firstOrFail();
 
         $validated = $request->validated();
         
-        // Inject ID detail petugas dan ID titik kumpulnya langsung dari server
+        // ID Petugas tetap di-inject dari server demi keamanan
         $validated['officer_id'] = $officerDetail->id; 
-        $validated['collection_point_id'] = $officerDetail->collection_point_id;
+
+        // BARIS INI DIHAPUS karena sudah dinamis dari form select:
+        // $validated['collection_point_id'] = $officerDetail->collection_point_id;
 
         PickupSchedule::create($validated);
 
         return redirect()->route('officer.jadwal')->with('success', 'Jadwal pengumpulan berhasil ditambahkan!');
     }
 
-  public function show($id)
-{
-    // Ambil data jadwal beserta relasi detail petugas dan user-nya
-    $schedule = PickupSchedule::with(['dropOffPoint', 'officer.user'])->findOrFail($id);
+    public function show($id)
+    {
+        // 1. Ambil data jadwal beserta relasi detail petugas dan user-nya
+        $schedule = PickupSchedule::with(['dropOffPoint', 'officer.user'])->findOrFail($id);
 
-    // Contoh pengambilan data agregasi riil dari relasi transaksi setoran (jika sudah ada nanti)
-    // Silakan sesuaikan nama model transaksi/setoran Anda jika sudah dibuat
-    $totalMassa = 0.00;   // e.g., $schedule->wasteDeposits()->sum('weight');
-    $totalKas = 0;        // e.g., $schedule->wasteDeposits()->sum('total_price');
-    $totalNasabah = 0;    // e.g., $schedule->wasteDeposits()->distinct('customer_id')->count();
-    $recentTransactions = []; // e.g., $schedule->wasteDeposits()->latest()->take(3)->get();
+        // 2. Ambil seluruh transaksi setoran (waste_deposits) yang terkait dengan jadwal ini
+        $depositsQuery = WasteDeposit::where('pickup_schedule_id', $id);
 
-    return view('officer.jadwal.detail-jadwal.index', compact(
-        'schedule', 
-        'totalMassa', 
-        'totalKas', 
-        'totalNasabah',
-        'recentTransactions'
-    ));
-}
+        // 3. Hitung Agregasi Riil dari Relasi Detail Transaksi menggunakan Query Builder / Eloquent
+        // Menghitung total massa berat sampah (Kg)
+        $totalMassa = DepositDetail::whereHas('wasteDeposit', function ($query) use ($id) {
+                            $query->where('pickup_schedule_id', $id);
+                        })->sum('weight_kg') ?? 0.00;
 
+        // Menghitung total perputaran kas saldo rupiah (Rp)
+        $totalKas = DepositDetail::whereHas('wasteDeposit', function ($query) use ($id) {
+                        $query->where('pickup_schedule_id', $id);
+                    })->sum('total_price') ?? 0;
+
+        // Menghitung jumlah nasabah unik yang ikut menyetor pada sesi jadwal ini
+        $totalNasabah = $depositsQuery->distinct('user_id')->count('user_id');
+
+        // 4. Ambil 3 Transaksi Terbaru (Master Detail Gabungan) untuk ditampilkan di widget riwayat ringkas
+        $recentTransactions = DepositDetail::with(['wasteDeposit.user', 'wastePrice.wasteCategory'])
+                                ->whereHas('wasteDeposit', function ($query) use ($id) {
+                                    $query->where('pickup_schedule_id', $id);
+                                })
+                                ->latest()
+                                ->take(3)
+                                ->get();
+
+        return view('officer.jadwal.detail-jadwal.index', compact(
+            'schedule', 
+            'totalMassa', 
+            'totalKas', 
+            'totalNasabah',
+            'recentTransactions'
+        ));
+    }
+    
+ /**
+     * Menampilkan Form Edit Jadwal Pengumpulan
+     */
+    public function edit($id)
+    {
+        // 1. Ambil data jadwal yang ingin diubah, pastikan milik petugas yang login (opsional untuk keamanan)
+        $schedule = PickupSchedule::findOrFail($id);
+
+        // 2. Ambil list drop-off point yang terikat dengan petugas yang login seperti pada halaman create
+        $dropOffPoints = OfficerDetail::with('dropOffPoint')
+                            ->where('user_id', auth()->id())
+                            ->get();
+
+        return view('officer.jadwal.edit', compact('schedule', 'dropOffPoints'));
+    }
+
+    /**
+     * Memperbarui Data Jadwal ke Database
+     */
+    public function update(PickupScheduleRequest $request, $id)
+    {
+        // 1. Ambil data jadwal target
+        $schedule = PickupSchedule::findOrFail($id);
+
+        // 2. Validasi data input (Gunakan Request yang sama dengan store atau sesuaikan)
+        $validated = $request->validated();
+
+        // 3. Update data ke database
+        $schedule->update($validated);
+
+        return redirect()->route('officer.jadwal')
+                         ->with('success', 'Jadwal pengumpulan berhasil diperbarui!');
+    }
     /**
      * Menampilkan Halaman Kelola Setoran dari Jadwal Terkait
      */
     public function setoran($id)
     {
-        // 1. Ambil data jadwal beserta titik kumpulnya
         $schedule = PickupSchedule::with('dropOffPoint')->findOrFail($id);
 
-        // 2. Ambil semua user dengan peran/role Nasabah (Masyarakat)
-        // Sesuaikan query pencarian role ini dengan sistem autentikasi aplikasi Anda
+        // Ambil semua user dengan peran/role Nasabah (Masyarakat)
         $nasabahList = User::where('role', 'citizen')
-                            ->orWhere('id', '!=', auth()->id()) // Contoh fallback jika tidak pakai role
                             ->get();
 
-        // 3. Ambil daftar komoditas harga sampah yang berlaku KHUSUS untuk jadwal operasional ini
+        // Ambil daftar komoditas harga sampah yang berlaku KHUSUS untuk jadwal operasional ini
         $availablePrices = SchedulePrice::with('wasteCategory')
                             ->where('pickup_schedule_id', $id)
                             ->get();
@@ -116,16 +161,14 @@ class PickupScheduleController extends Controller
 
         DB::beginTransaction();
         try {
-            // 1. Simpan baris induk transaksi (waste_deposits)
-$deposit = WasteDeposit::create([
-    'user_id'            => $validated['user_id'],
-    // Menggunakan operator ?? (Null Coalescing) sebagai cadangan jika properti utama kosong
-    'drop_off_point_id'  => $schedule->drop_off_point_id ?? $schedule->dropOffPoint->id ?? null,
-    'pickup_schedule_id' => $schedule->id,
-    'officer_id'         => auth()->id(),
-    'deposit_date'       => now(),
-]);
-
+            // 1. Simpan baris induk transaksi (waste_deposits) menggunakan ID Petugas yang sedang login
+            $deposit = WasteDeposit::create([
+                'user_id'            => $validated['user_id'],
+                'drop_off_point_id'  => $schedule->drop_off_point_id ?? $schedule->dropOffPoint->id ?? null,
+                'pickup_schedule_id' => $schedule->id,
+                'officer_id'         => auth()->id(), 
+                'deposit_date'       => now(),
+            ]);
 
             // 2. Loop & Simpan ke tabel Anak (deposit_details)
             foreach ($validated['items'] as $item) {
@@ -148,12 +191,12 @@ $deposit = WasteDeposit::create([
                              ->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
         }
     }
+
     /**
      * Menampilkan Halaman Kelola Harga Sampah dari Jadwal Terkait
      */
     public function harga($id)
     {
-        // Load relasi wastePriceSchedules untuk memunculkan daftar komponen harga operasional
         $schedule = PickupSchedule::with(['dropOffPoint', 'wastePriceSchedules'])->findOrFail($id);
 
         return view('officer.jadwal.detail-jadwal.harga.index', compact('schedule'));
@@ -162,11 +205,21 @@ $deposit = WasteDeposit::create([
     /**
      * Menghapus Jadwal Terpilih
      */
-    public function destroy($id)
-    {
-        $schedule = PickupSchedule::findOrFail($id);
-        $schedule->delete();
+public function destroy($id)
+{
+    $schedule = PickupSchedule::findOrFail($id);
 
-        return redirect()->route('officer.jadwal')->with('success', 'Jadwal operasional pengumpulan sukses dihapus!');
+    // Cek apakah sudah ada transaksi yang terikat dengan jadwal ini
+    $hasTransactions = \App\Models\WasteDeposit::where('pickup_schedule_id', $id)->exists();
+
+    if ($hasTransactions) {
+        return redirect()->route('officer.jadwal')
+                         ->with('error', 'Jadwal tidak dapat dihapus karena sudah memiliki rekapan log transaksi timbangan nasabah!');
     }
+
+    // Jika bersih dari transaksi, baru jalankan fungsi hapus
+    $schedule->delete();
+
+    return redirect()->route('officer.jadwal')->with('success', 'Jadwal operasional sukses dihapus!');
+}
 }

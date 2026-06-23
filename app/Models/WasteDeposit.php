@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WasteDeposit extends Model
 {
@@ -36,6 +37,12 @@ class WasteDeposit extends Model
     {
         return $this->belongsTo(PickupSchedule::class, 'pickup_schedule_id');
     }
+    
+    public function depositDetails(): HasMany
+    {
+        return $this->HasMany(DepositDetail::class, 'waste_deposit_id');
+    }
+    
 
     public function officer(): BelongsTo
     {

@@ -1,13 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PickupScheduleController;
-use App\Http\Controllers\SchedulePriceController;
 use App\Http\Controllers\DepositHistoryController;
+use App\Http\Controllers\PickupScheduleController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SchedulePriceController;
+use Illuminate\Support\Facades\Route;
+
 
 Route::view('/dashboard', 'officer.dashboard')->name('officer.dashboard');
-Route::view('/monitoring', 'officer.monitoring.index')->name('officer.monitoring');
+Route::prefix('laporan')->group(function () {
+Route::get('/', [ReportController::class, 'index'])->name('officer.laporan.index');
+    Route::get('/export/excel', [ReportController::class, 'exportExcel'])->name('officer.laporan.excel');
 
+    // Navigasi halaman detail & export tunggal
+    Route::get('/{id}/show', [ReportController::class, 'showPage'])->name('officer.laporan.showPage');
+    Route::get('/{id}/export-single', [ReportController::class, 'exportSingleExcel'])->name('officer.laporan.exportSingle');
+});
 Route::prefix('jadwal')->group(function () {
     Route::get('/', [PickupScheduleController::class, "index"])->name('officer.jadwal');
     Route::get('/create', [PickupScheduleController::class, 'create'])->name('officer.jadwal.create');

@@ -34,7 +34,7 @@
                             <option value="" disabled selected>Cari nama nasabah...</option>
                             @foreach($nasabahList as $nasabah)
                                 <option value="{{ $nasabah->id }}" {{ old('user_id') == $nasabah->id ? 'selected' : '' }}>
-                                    {{ $nasabah->name }} ({{ $nasabah->phone_number ?? 'No Telp' }})
+                                    {{ $nasabah->name }} ({{ $nasabah->phone_number }})
                                 </option>
                             @endforeach
                         </select>
