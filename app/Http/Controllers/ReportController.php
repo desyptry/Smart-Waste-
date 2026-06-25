@@ -90,4 +90,15 @@ class ReportController extends Controller
         echo '</table>';
         exit;
     }
+     public function adminIndex(Request $request)
+    {
+        $query = WasteDeposit::with(['user', 'dropOffPoint', 'officer', 'depositDetails.wastePrice.wasteCategory'])
+            ->withSum('depositDetails as total_weight', 'weight_kg')
+            ->withSum('depositDetails as total_price', 'total_price');
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('deposit_date', [$request->start_date . ' 00:00:00', $request->end_date . ' 23:59:59']);
+        }
+        $reports = $query->latest('deposit_date')->paginate(15)->withQueryString();
+        return view('admin.laporan.index', compact('reports'));
+    }
 }

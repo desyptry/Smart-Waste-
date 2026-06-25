@@ -46,7 +46,7 @@
 
         <!-- Posko -->
         <li>
-            <a href="/admin/posko" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{ route('admin.posko.index') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Data Posko</span>
                 <span class="link-icon hidden">
                     <x-mdi-office-building class="w-6 h-6"/>
@@ -57,7 +57,7 @@
 
         <!-- Laporan -->
         <li>
-            <a href="/admin/laporan" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{ route('admin.laporan.index') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Laporan</span>
                 <span class="link-icon hidden">
                     <x-mdi-chart-bar class="w-6 h-6"/>
@@ -67,7 +67,7 @@
 
         <!-- Konfigurasi -->
         <li>
-            <a href="/admin/konfigurasi" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{ route('admin.konfigurasi.index') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Konfigurasi</span>
                 <span class="link-icon hidden">
                     <x-mdi-cog class="w-6 h-6"/>

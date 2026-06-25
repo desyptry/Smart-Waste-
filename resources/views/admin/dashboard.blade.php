@@ -26,7 +26,7 @@ else $greeting = "Malam";
 
             <div class="mt-5">
                 <p class="text-gray-400 text-sm">Total Sistem Hari Ini</p>
-                <h2 class="text-3xl font-bold">Rp 1.200.000,-</h2>
+                <h2 class="text-3xl font-bold">Rp {{ number_format($totalKasHariIni, 0, ',', '.') }},-</h2>
             </div>
         </div>
 
@@ -44,22 +44,22 @@ else $greeting = "Malam";
 
     <div class="bg-white p-4 rounded-xl shadow text-center hover:scale-105 transition">
         <p class="text-gray-500 text-sm">Total User</p>
-        <h2 class="text-xl font-bold text-[#2D333D] mt-1">150</h2>
+        <h2 class="text-xl font-bold text-[#2D333D] mt-1">{{ $totalUser }}</h2>
     </div>
 
     <div class="bg-white p-4 rounded-xl shadow text-center hover:scale-105 transition">
         <p class="text-gray-500 text-sm">Total Petugas</p>
-        <h2 class="text-xl font-bold text-[#2D333D] mt-1">12</h2>
+         <h2 class="text-xl font-bold text-[#2D333D] mt-1">{{ $totalPetugas }}</h2>
     </div>
 
     <div class="bg-white p-4 rounded-xl shadow text-center hover:scale-105 transition">
         <p class="text-gray-500 text-sm">Total Posko</p>
-        <h2 class="text-xl font-bold text-[#2D333D] mt-1">8</h2>
+        <h2 class="text-xl font-bold text-[#2D333D] mt-1">{{ $totalPosko }}</h2>
     </div>
 
     <div class="bg-white p-4 rounded-xl shadow text-center hover:scale-105 transition">
         <p class="text-gray-500 text-sm">Total Sampah</p>
-        <h2 class="text-xl font-bold text-[#2D333D] mt-1">1.2 Ton</h2>
+        <h2 class="text-xl font-bold text-[#2D333D] mt-1">{{ $totalSampah }}</h2>
     </div>
 
 </div>
@@ -73,12 +73,16 @@ else $greeting = "Malam";
 
         <div class="space-y-3 text-sm">
 
-            <div class="flex justify-between  pb-2">
+            {{-- <div class="flex justify-between  pb-2">
                 <span>User baru mendaftar</span>
-                <span class="text-gray-400">1 jam lalu</span>
+                <span class="text-gray-400">1 jam lalu</span> --}}
+            @forelse($activities as $act)
+            <div class="flex justify-between pb-2 border-b border-gray-100 last:border-0">
+                <span>{{ $act['desc'] }}</span>
+                <span class="text-gray-400">{{ is_string($act['time']) ? $act['time'] : $act['time']->diffForHumans() }}</span>
             </div>
 
-            <div class="flex justify-between  pb-2">
+            {{-- <div class="flex justify-between  pb-2">
                 <span>Setoran sampah masuk</span>
                 <span class="text-gray-400">2 jam lalu</span>
             </div>
@@ -86,8 +90,10 @@ else $greeting = "Malam";
             <div class="flex justify-between  pb-2">
                 <span>Verifikasi berhasil</span>
                 <span class="text-gray-400">3 jam lalu</span>
-            </div>
-
+            </div> --}}
+            @empty
+            <div class="text-gray-500 text-center py-4">Belum ada aktivitas terbaru.</div>
+            @endforelse
         </div>
     </div>
 
@@ -99,22 +105,22 @@ else $greeting = "Malam";
 
             <div class="flex justify-between">
                 <span>User Aktif</span>
-                <span class="font-bold">120</span>
+                <span class="font-bold">{{ $userAktifCount }}</span>
             </div>
 
             <div class="flex justify-between">
                 <span>Petugas Aktif</span>
-                <span class="font-bold">10</span>
+                <span class="font-bold">{{ $petugasAktifCount }}</span>
             </div>
 
             <div class="flex justify-between">
                 <span>Transaksi Hari Ini</span>
-                <span class="font-bold">45</span>
+                <span class="font-bold">{{ $transaksiHariIni }}</span>
             </div>
 
             <div class="flex justify-between">
                 <span>Pending Verifikasi</span>
-                <span class="font-bold text-red-500">6</span>
+                <span class="font-bold text-red-500">{{ $pendingVerifikasi }}</span>
             </div>
 
         </div>
@@ -127,14 +133,14 @@ else $greeting = "Malam";
 
     <div>
         <h2 class="font-bold text-[#2D333D] text-lg">
-            Laporan Bulanan
+            Laporan Akumulasi
         </h2>
-        <p class="text-sm text-gray-700">Periode: Maret 2026</p>
+        <p class="text-sm text-gray-700">Periode: {{ date('F Y') }}</p>
     </div>
 
     <div class="text-right">
-        <p class="text-sm text-gray-700">Total Pendapatan</p>
-        <h2 class="text-xl font-bold text-[#2D333D]">Rp10.000.000</h2>
+        <p class="text-sm text-gray-700">Total Kas Terkumpul</p>
+        <h2 class="text-xl font-bold text-[#2D333D]">Rp {{ number_format($totalKas, 0, ',', '.') }},-</h2>
     </div>
 
 </div>

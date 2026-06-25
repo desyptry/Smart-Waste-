@@ -13,6 +13,10 @@ class DropOffPointRequest extends FormRequest
         return [
             'name' => 'required|string|max:200',
             'address' => 'required|string',
+            'location' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'assesor_id' => 'nullable|exists:users,id',
         ];
     }
 }

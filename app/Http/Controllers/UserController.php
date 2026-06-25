@@ -20,10 +20,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'role' => 'required|in:admin,officer,resident',
+            'role' => 'required|in:admin,officer,citizen,assesor',
             'address' => 'nullable|string',
             'phone_number' => 'nullable|string|max:15',
-            'status' => 'nullable|in:active,inactive',
+            'status' => 'nullable|in:active,inactive,banned',
         ]);
 
         $data = $request->all();
@@ -40,10 +40,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:6',
-            'role' => 'required|in:admin,officer,resident',
+            'role' => 'required|in:admin,officer,citizen,assesor',
             'address' => 'nullable|string',
             'phone_number' => 'nullable|string|max:15',
-            'status' => 'nullable|in:active,inactive',
+             'status' => 'nullable|in:active,inactive,banned',
         ]);
 
         $data = $request->except('password');

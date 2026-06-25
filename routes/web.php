@@ -18,8 +18,8 @@ Route::get('/', function () {
     
     // UPDATE: Berikan dua nama agar dibaca aman oleh Breeze maupun Controller Anda
     Route::get('/user/dashboard', function () {
-        return view('citizen.dashboard');
-    })->name('dashboard')->name('citizen.dashboard'); 
+        return view('user.dashboard');
+    })->name('dashboard')->name('user.dashboard'); 
 
     // Dashboard untuk Officer
     Route::get('/officer/dashboard', function () {
@@ -27,9 +27,9 @@ Route::get('/', function () {
     })->name('officer.dashboard');
 
     // Dashboard untuk Admin
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    // Route::get('/admin/dashboard', function () {
+    //     return view('admin.dashboard');
+    // })->name('admin.dashboard');
 
     // Dashboard untuk Assesor
     Route::get('/assesor/dashboard', function () {
