@@ -60,43 +60,7 @@
     {{-- Layout Grid Bawah --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {{-- Log Timbangan Terakhir --}}
-        <div class="bg-white rounded-[2rem] p-6 md:p-8 shadow-xl border border-gray-100 lg:col-span-2 space-y-6">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h3 class="text-base font-black text-slate-800 uppercase tracking-wider">Aktivitas Timbangan Terakhir</h3>
-                    <p class="text-xs text-gray-400 font-semibold mt-0.5">Transaksi setoran masuk paling mutakhir</p>
-                </div>
-                <a href="{{ route('officer.jadwal.detail.setoran', $schedule->id) }}" class="text-xs font-black text-[#69C3C1] hover:underline uppercase tracking-wide">Lihat Semua</a>
-            </div>
-
-            <div class="overflow-x-auto rounded-2xl border border-gray-50">
-                <table class="w-full text-sm text-left bg-white">
-                    <thead class="bg-[#F4F9FC] text-[10px] font-black uppercase tracking-wider text-slate-800 border-b border-gray-100">
-                        <tr>
-                            <th class="p-4 pl-6">ID Detail</th>
-                            <th class="p-4">Berat</th>
-                            <th class="p-4">Total Rupiah</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-50 font-semibold text-slate-600">
-                        {{-- Loop riwayat timbangan riil jika sudah ada relasi ke transaksi --}}
-                        @forelse($recentTransactions ?? [] as $tx)
-                            <tr>
-                                <td class="p-4 font-black text-slate-800 pl-6">#DTL-{{ $tx->id }}</td>
-                                <td class="p-4">{{ number_format($tx->total_weight, 2) }} Kg</td>
-                                <td class="p-4 text-emerald-600 font-bold">Rp {{ number_format($tx->total_amount, 0, ',', '.') }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="p-6 text-center text-gray-400 text-xs font-medium">Belum ada aktivitas penimbangan untuk jadwal ini.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+    
         {{-- Card Informasi Petugas & Waktu Terikat Jadwal --}}
         <div class="bg-white rounded-[2rem] p-6 md:p-8 shadow-xl border border-gray-100 space-y-6 flex flex-col justify-between">
             <div class="space-y-4">

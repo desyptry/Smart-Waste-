@@ -41,10 +41,10 @@
             <div class="h-[1px] w-full bg-gray-100 my-2 md:hidden"></div>
             
             <li class="w-full md:w-auto">
-                <a href="#" class="block text-center px-8 py-2.5 border-2 border-[#69C3C1] text-[#69C3C1] rounded-full hover:bg-[#69C3C1] hover:text-white transition-all font-bold">Daftar</a>
+                <a href="{{route('register')}}" class="block text-center px-8 py-2.5 border-2 border-[#69C3C1] text-[#69C3C1] rounded-full hover:bg-[#69C3C1] hover:text-white transition-all font-bold">Daftar</a>
             </li>
             <li class="w-full md:w-auto">
-                <a href="#" class="block text-center px-8 py-2.5 bg-[#69C3C1] text-white rounded-full hover:bg-[#58a8a6] shadow-lg shadow-cyan-100 transition-all font-bold">Login</a>
+                <a href="{{route('login')}}" class="block text-center px-8 py-2.5 bg-[#69C3C1] text-white rounded-full hover:bg-[#58a8a6] shadow-lg shadow-cyan-100 transition-all font-bold">Login</a>
             </li>
         </ul>
     </div>

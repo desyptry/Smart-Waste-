@@ -1,14 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\WasteCategoryController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
-// Semua route admin
-use App\Http\Controllers\WasteCategoryController;
-use App\Http\Controllers\DropOffPointController;
+// use App\Http\Controllers\WasteCategoryController;
+use App\Http\Controllers\AdminReportController;
 use App\Http\Controllers\ConfigurationController;
+// Semua route admin
+use App\Http\Controllers\DropOffPointController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\WasteCategoryController;
+use Illuminate\Support\Facades\Route;
+
 //     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
 //     Route::view('/user', 'admin.user.index')->name('admin.user');
 //     Route::view('/kategori', 'admin.kategori.index')->name('admin.kategori');
@@ -51,5 +53,7 @@ use App\Http\Controllers\ReportController;
     Route::get('/konfigurasi', [ConfigurationController::class, 'index'])->name('konfigurasi.index');
     Route::put('/konfigurasi', [ConfigurationController::class, 'update'])->name('konfigurasi.update');
     // Admin Laporan (Report)
-    Route::get('/laporan', [ReportController::class, 'adminIndex'])->name('laporan.index');
+    Route::get('/laporan-global', [AdminReportController::class, 'index'])->name('laporan.global');
+    Route::get('/laporan-global/export', [AdminReportController::class, 'exportGlobalExcel'])->name('laporan.exportExcel');
+
 });

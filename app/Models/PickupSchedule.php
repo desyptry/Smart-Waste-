@@ -37,4 +37,9 @@ class PickupSchedule extends Model
     {
         return $this->hasMany(SchedulePrice::class, 'pickup_schedule_id');
     }
+    public function wasteDeposits()
+    {
+        // Pastikan nama foreign key di tabel 'waste_deposits' adalah 'pickup_schedule_id'
+        return $this->hasMany(WasteDeposit::class, 'pickup_schedule_id');
+    }
 }

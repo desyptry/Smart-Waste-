@@ -2,41 +2,154 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\WasteDeposit;
-use App\Models\DepositDetail;
-use App\Models\User;
+use App\Models\Withdrawal;
+use App\Models\PickupSchedule;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class AssesorMonitoringController extends Controller
 {
     public function index(Request $request)
     {
-        // 1. STATISTIK SUPERVISI GLOBAL
-        $totalMassa = DepositDetail::sum('weight_kg');
-        $totalPerputaranKas = DepositDetail::sum('total_price');
+        // 1. STATISTIK SUPERVISI GLOBAL (Selalu murni akumulasi total tanpa terpengaruh filter)
+        $totalPendingDana = Withdrawal::where('status', 'pending')->sum('amount');
+        $totalDicairkan   = Withdrawal::where('status', 'approved')->sum('amount');
+        $totalPenolakan   = Withdrawal::where('status', 'rejected')->count();
+
+        // 2. QUERY LAPORAN 1: PENARIKAN SALDO (WITHDRAWALS)
+        $withdrawalQuery = Withdrawal::with(['user', 'asessor']);
+
+        // 3. QUERY LAPORAN 2: JADWAL DROP-OFF (PICKUP SCHEDULES VERIFIED)
+        $scheduleQuery = PickupSchedule::with(['dropOffPoint'])
+            ->where('status', 'verified');
+
+        // --- CORE FIX: PROSES LOGIKA FILTER REQUEST ---
         
-        // Menghitung berapa banyak tindakan penolakan jadwal/harga yang telah dilakukan assessor
-        $totalOfficerAktif = User::where('role', 'officer')->count();
-
-        // 2. QUERY UTAMA JURNAL MONITORING (Melihat Kerja Officer & Setoran Warga)
-        $query = WasteDeposit::with(['user', 'dropOffPoint', 'officer'])
-            ->withSum('depositDetails as total_weight', 'weight_kg')
-            ->withSum('depositDetails as total_price', 'total_price');
-
-        // Filter Tanggal jika diterapkan oleh Assessor
+        // Filter Berdasarkan Rentang Tanggal
         if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween('deposit_date', [$request->start_date . ' 00:00:00', $request->end_date . ' 23:59:59']);
+            $dateRange = [$request->start_date . ' 00:00:00', $request->end_date . ' 23:59:59'];
+            
+            $withdrawalQuery->whereBetween('created_at', $dateRange);
+            $scheduleQuery->whereBetween('start_date', $dateRange); 
         }
 
-        // Filter spesifik berdasarkan Officer yang bertugas (Fungsi Pengawasan Assessor terhadap Officer)
-        if ($request->filled('officer_id')) {
-            $query->where('officer_id', $request->officer_id);
+        // Filter Berdasarkan Metode Pembayaran (Hanya berdampak pada tabel keuangan/Withdrawal)
+        if ($request->filled('method')) {
+            $withdrawalQuery->where('method', $request->method);
         }
 
-        $logs = $query->latest('deposit_date')->paginate(10)->withQueryString();
-        $officers = User::where('role', 'officer')->get(); // Untuk dropdown filter
+        // Filter Berdasarkan Nama Bank / Dompet (Mencari teks yang mirip di kolom account_name)
+        if ($request->filled('account_name')) {
+            $withdrawalQuery->where('account_name', 'LIKE', '%' . $request->account_name . '%');
+        }
 
-        return view('assesor.laporan.index', compact('logs', 'totalMassa', 'totalPerputaranKas', 'totalOfficerAktif', 'officers'));
+        // Ambil data dengan penomoran halaman (paginasi) terpisah
+        $withdrawalLogs = $withdrawalQuery->latest()->paginate(5, ['*'], 'wd_page')->withQueryString();
+        $scheduleLogs   = $scheduleQuery->latest('start_date')->paginate(5, ['*'], 'sch_page')->withQueryString();
+
+        return view('assesor.laporan.index', compact(
+            'withdrawalLogs', 
+            'scheduleLogs',
+            'totalPendingDana', 
+            'totalDicairkan', 
+            'totalPenolakan'
+        ));
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $withdrawalQuery = Withdrawal::with(['user']);
+        $scheduleQuery = PickupSchedule::with(['dropOffPoint'])->where('status', 'verified');
+
+        // --- PENYELARASAN FILTER UNTUK EKSPOR EXCEL ---
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $dateRange = [$request->start_date . ' 00:00:00', $request->end_date . ' 23:59:59'];
+            $withdrawalQuery->whereBetween('created_at', $dateRange);
+            $scheduleQuery->whereBetween('start_date', $dateRange);
+        }
+
+        if ($request->filled('method')) {
+            $withdrawalQuery->where('method', $request->method);
+        }
+
+        if ($request->filled('account_name')) {
+            $withdrawalQuery->where('account_name', 'LIKE', '%' . $request->account_name . '%');
+        }
+
+        $withdrawals = $withdrawalQuery->latest()->get();
+        $schedules = $scheduleQuery->latest('start_date')->get();
+
+        // Setup Header Unduhan Excel
+        $fileName = "Laporan_Audit_Assessor_" . date('Y-m-d') . ".xls";
+        header("Content-Type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=\"$fileName\"");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        // Print Metadata
+        echo "<h3>LAPORAN AUDIT GLOBAL ASSESSOR</h3>";
+        echo "<p>Tanggal Ekspor: " . date('d-m-Y H:i') . " Wita</p>";
+        if($request->filled('start_date')) {
+            echo "<p>Periode Tanggal: " . $request->start_date . " s/d " . $request->end_date . "</p>";
+        }
+        if($request->filled('method')) {
+            echo "<p>Filter Metode: " . strtoupper(str_replace('_', ' ', $request->method)) . "</p>";
+        }
+        if($request->filled('account_name')) {
+            echo "<p>Filter Bank/Dompet: " . strtoupper($request->account_name) . "</p>";
+        }
+        echo "<br>";
+
+        // --- TABEL 1: WITHDRAWALS ---
+        echo "<table border='1'>";
+        echo "<tr><th colspan='8' style='background-color:#f89406; color:white; font-weight:bold;'>JURNAL PENCAIRAN DANA (WITHDRAWALS)</th></tr>";
+        echo "<tr style='background-color:#f2f2f2; font-weight:bold;'>
+                <th>ID Transaksi</th>
+                <th>Tanggal Pengajuan</th>
+                <th>Nama Warga</th>
+                <th>Metode Pembayaran</th>
+                <th>Nama Bank / E-Wallet</th>
+                <th>Nama Pemilik Rekening</th>
+                <th>Nomor Rekening / HP</th>
+                <th>Nominal Penarikan (Rp)</th>
+              </tr>";
+              
+        foreach ($withdrawals as $w) {
+            $methodLabel = strtoupper(str_replace('_', ' ', $w->method));
+            echo "<tr>
+                    <td>#WD-{$w->id}</td>
+                    <td>{$w->created_at}</td>
+                    <td>" . ($w->user->name ?? 'N/A') . "</td>
+                    <td>{$methodLabel}</td>
+                    <td>" . strtoupper($w->account_name ?? '-') . "</td> 
+                    <td>" . ($w->user->name ?? '-') . "</td>       
+                    <td>'{$w->account_number}</td>                 
+                    <td>" . number_format($w->amount, 0, ',', '.') . "</td>
+                  </tr>";
+        }
+        echo "</table>";
+
+        echo "<br><br>";
+
+        // --- TABEL 2: PICKUP SCHEDULES ---
+        echo "<table border='1'>";
+        echo "<tr><th colspan='4' style='background-color:#149bdf; color:white; font-weight:bold;'>MANIFES JADWAL DROP-OFF SAMPAH (VERIFIED)</th></tr>";
+        echo "<tr style='background-color:#f2f2f2; font-weight:bold;'>
+                <th>ID Jadwal</th>
+                <th>Waktu Mulai Kedatangan</th>
+                <th>Titik Drop-Off Point</th>
+                <th>Status Validasi</th>
+              </tr>";
+              
+        foreach ($schedules as $s) {
+            echo "<tr>
+                    <td>#SCH-{$s->id}</td>
+                    <td>{$s->start_date}</td>
+                    <td>" . ($s->dropOffPoint->name ?? 'Pusat Lapangan') . "</td>
+                    <td>" . strtoupper($s->status) . "</td>
+                  </tr>";
+        }
+        echo "</table>";
+        
+        exit;
     }
 }

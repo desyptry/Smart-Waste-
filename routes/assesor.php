@@ -15,6 +15,7 @@ use App\Http\Controllers\WithdrawalAssesorController; // Sesuaikan namespace jik
     
 Route::prefix('/laporan')->group(function () {
     Route::get('/', [AssesorMonitoringController::class, 'index'])->name('assesor.laporan');
+    Route::get('/export', [AssesorMonitoringController::class, 'exportExcel'])->name('assesor.laporan.export');
 });
     // Verifikasi Jadwal (Mengarah ke PickupScheduleController)
 Route::prefix('/jadwal')->group(function () {

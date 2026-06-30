@@ -57,7 +57,7 @@
 
         <!-- Laporan -->
         <li>
-            <a href="{{ route('admin.laporan.index') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{ route('admin.laporan.global') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Laporan</span>
                 <span class="link-icon hidden">
                     <x-mdi-chart-bar class="w-6 h-6"/>

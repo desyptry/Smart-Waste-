@@ -1,11 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WasteCatalogController;
+use App\Http\Controllers\WithdrawalController;
+use Illuminate\Support\Facades\Route;
+
 
 Route::view('/', 'user.index');
+    Route::get('/pencairan', [WithdrawalController::class, 'index'])->name('user.withdrawal');
+    Route::post('/pencairan', [WithdrawalController::class, 'store'])->name('user.withdrawal.store');
     Route::view('/dashboard', 'user.dashboard.index')->name('user.dashboard');
-    Route::view('/pencairan', 'user.pencairan.index')->name('user.pencairan');
     Route::view('/riwayat', 'user.riwayat.index')->name('user.riwayat');
     Route::view('/jadwal', 'user.jadwal.index')->name('user.jadwal');
     Route::view('/jadwal', 'user.jadwal.index')->name('user.jadwal');

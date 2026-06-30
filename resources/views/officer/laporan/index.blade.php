@@ -6,7 +6,9 @@
     <div class="bg-[#2D333D] px-8 py-6 rounded-[2rem] shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
             <h1 class="text-xl font-black text-white tracking-wide uppercase">Monitoring Transaksi Nasabah</h1>
-            <p class="text-gray-400 text-xs font-medium mt-1">Pantau rangkuman seluruh nota timbangan masuk dan kelola rincian manifes komoditas</p>
+            <p class="text-gray-400 text-xs font-medium mt-1">
+                Akun Petugas: <span class="text-[#69C3C1] font-bold">{{ auth()->user()->name }}</span> (Menampilkan rekapan input personal Anda)
+            </p>
         </div>
     </div>
 
@@ -17,7 +19,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
             </div>
             <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Berat</p>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Berat Kontribusi</p>
                 <h3 class="text-xl font-black text-slate-800 mt-0.5">{{ number_format($totalMassa, 2, ',', '.') }} Kg</h3>
             </div>
         </div>
@@ -27,7 +29,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
             <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Kas Keluar</p>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Penyaluran Dana</p>
                 <h3 class="text-xl font-black text-slate-800 mt-0.5">Rp {{ number_format($totalKas, 0, ',', '.') }}</h3>
             </div>
         </div>
@@ -37,16 +39,34 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
             </div>
             <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Nota Transaksi</p>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Nota Valid</p>
                 <h3 class="text-xl font-black text-slate-800 mt-0.5">{{ $totalTransaksi }} Nota</h3>
             </div>
         </div>
     </div>
 
-    {{-- Panel Filter & Ekspor Massal --}}
+    {{-- Panel Filter & Pencarian Lanjutan --}}
     <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm space-y-4">
-        <form method="GET" action="{{ route('officer.laporan.index') }}" class="flex flex-col lg:flex-row items-end justify-between gap-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-2/3">
+        <form method="GET" action="{{ route('officer.laporan.index') }}" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {{-- Pencarian Kata Kunci --}}
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-slate-700 uppercase tracking-wider ml-1">Cari Nasabah / ID Struk</label>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Ketik nama atau ID..." class="w-full px-4 py-3 bg-slate-50 border border-gray-100 rounded-xl font-semibold text-sm text-slate-700 outline-none focus:border-[#69C3C1] focus:bg-white transition-all">
+                </div>
+
+                {{-- Drop-Off Point --}}
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-slate-700 uppercase tracking-wider ml-1">Posko Drop-Off</label>
+                    <select name="drop_off_point_id" class="w-full px-4 py-3 bg-slate-50 border border-gray-100 rounded-xl font-semibold text-sm text-slate-700 outline-none focus:border-[#69C3C1] focus:bg-white transition-all">
+                        <option value="">-- Semua Posko --</option>
+                        @foreach($dropOffPoints as $posko)
+                            <option value="{{ $posko->id }}" {{ request('drop_off_point_id') == $posko->id ? 'selected' : '' }}>{{ $posko->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Rentang Tanggal --}}
                 <div class="space-y-1">
                     <label class="text-[10px] font-black text-slate-700 uppercase tracking-wider ml-1">Dari Tanggal</label>
                     <input type="date" name="start_date" value="{{ request('start_date') }}" class="w-full px-4 py-3 bg-slate-50 border border-gray-100 rounded-xl font-semibold text-sm text-slate-700 outline-none focus:border-[#69C3C1] focus:bg-white transition-all">
@@ -57,20 +77,48 @@
                 </div>
             </div>
             
-            <div class="flex w-full lg:w-auto gap-2">
-                <button type="submit" class="flex-1 lg:flex-none px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all">Filter</button>
-                <a href="{{ route('officer.laporan.index') }}" class="px-4 py-3 bg-gray-100 text-gray-500 font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center">Reset</a>
+            <div class="flex justify-end gap-2">
+                <a href="{{ route('officer.laporan.index') }}" class="px-5 py-3 bg-gray-100 text-gray-500 font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-gray-200 transition-all">Reset Filter</a>
+                <button type="submit" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all">Terapkan Analisis</button>
             </div>
         </form>
 
         <hr class="border-gray-100">
 
-        {{-- Opsi Global Export (Mengekspor seluruh rekap baris master berdasarkan filter tanggal) --}}
-        <div class="flex items-center gap-2 pt-2">
-            <span class="text-xs font-bold text-gray-400 mr-2">Opsi Ekspor Data Kontrol:</span>
-            <a href="{{ route('officer.laporan.excel', request()->all()) }}" class="flex items-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all">
-                📥 Export Rangkuman Jurnal Nota (.XLS)
-            </a>
+        {{-- GRID FITUR EKSPOR MASSAL --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            {{-- Ekspor Berdasarkan Rentang Tanggal Jurnal --}}
+            <div class="bg-slate-50 p-4 rounded-2xl border border-gray-100 flex flex-col justify-between space-y-2">
+                <div>
+                    <h4 class="text-xs font-black text-slate-800 uppercase">1. Unduh Berdasarkan Rentang Tanggal</h4>
+                    <p class="text-[11px] text-gray-400 font-medium">Mengekspor seluruh rekap baris master di atas sesuai filter tanggal aktif.</p>
+                </div>
+                <a href="{{ route('officer.laporan.excel', request()->all()) }}" class="w-fit flex items-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition-all">
+                    📥 Export Jurnal Jilid (.XLS)
+                </a>
+            </div>
+
+            {{-- FITUR BARU: Ekspor Berdasarkan Sesi Jadwal Kerja (Pickup Schedule) --}}
+            <div class="bg-teal-50/40 p-4 rounded-2xl border border-teal-100/50 flex flex-col justify-between space-y-2">
+                <div>
+                    <h4 class="text-xs font-black text-teal-900 uppercase">2. Unduh Manifes Per Sesi Jadwal Selesai</h4>
+                    <p class="text-[11px] text-teal-700/70 font-medium">Ambil laporan terpadu komprehensif dari semua timbangan yang masuk dalam satu jadwal kerja lapangan.</p>
+                </div>
+                <form method="POST" action="{{ route('officer.laporan.exportBySchedule') }}" class="flex gap-2 items-center">
+                    @csrf
+                    <select name="pickup_schedule_id" required class="flex-1 px-3 py-2 bg-white border border-teal-200 rounded-xl text-xs font-semibold text-slate-700 outline-none">
+                        <option value="" disabled selected>-- Pilih Sesi Penugasan Jadwal --</option>
+                        @foreach($schedules as $sch)
+                            <option value="{{ $sch->id }}">
+                                #{{ $sch->id }} - {{ $sch->dropOffPoint->name }} ({{ \Carbon\Carbon::parse($sch->date)->format('d M y') }})
+                            </option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="px-4 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all whitespace-nowrap">
+                        🚀 Unduh Manifes
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -105,7 +153,6 @@
                             <td class="p-4 font-black text-slate-700">{{ number_format($item->total_weight ?? 0, 2, ',', '.') }} Kg</td>
                             <td class="p-4 text-emerald-600 font-black">Rp {{ number_format($item->total_price ?? 0, 0, ',', '.') }}</td>
                             <td class="p-4 text-center pr-6">
-                                {{-- Tombol Menuju Halaman Detail Dedicated Transaksi --}}
                                 <a href="{{ route('officer.laporan.showPage', $item->id) }}" class="inline-block bg-[#F4F9FC] hover:bg-[#69C3C1] text-[#69C3C1] hover:text-white px-4 py-2 rounded-xl font-black text-xs transition-all border border-transparent shadow-sm">
                                     Lihat Rincian & Cetak ➔
                                 </a>

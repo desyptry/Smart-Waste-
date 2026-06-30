@@ -7,7 +7,6 @@
         </div>
         <div>
             <div class="flex items-center gap-2">
-                <span class="text-xs font-black bg-[#2D333D] text-white px-2 py-1 rounded">#SCH-{{ $schedule->id }}</span>
                 <h1 class="text-2xl font-black text-slate-800 tracking-tight">Detail Operasional Jadwal</h1>
             </div>
             <p class="text-gray-500 font-semibold text-sm mt-1">Titik Kumpul: <span class="text-slate-800 font-black">{{ $schedule->dropOffPoint->name ?? 'Drop-Off' }}</span></p>
@@ -18,7 +17,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
-        Kembali ke Daftar
+        Kembali ke Daftar Jadwal
     </a>
 </div>
 

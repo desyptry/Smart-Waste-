@@ -68,9 +68,9 @@
 
                         <div class="flex gap-2 id-action-buttons-{{ $wd->id }}">
                             {{-- Tombol Trigger Box Tolak --}}
-                            <button type="button" onclick="showRejectInput({{ $wd->id }})" class="px-3 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs uppercase rounded-xl transition-all">
+                            <!-- <button type="button" onclick="showRejectInput({{ $wd->id }})" class="px-3 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs uppercase rounded-xl transition-all">
                                 Tolak
-                            </button>
+                            </button> -->
 
                             {{-- Tombol Approve Setelah Selesai Transfer Manual --}}
                             <button type="submit" name="action" value="approve" class="flex-1 lg:flex-none px-4 py-2.5 bg-[#69C3C1] hover:bg-[#57A3A1] text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-sm">
