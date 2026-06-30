@@ -10,4 +10,10 @@ class WasteCatalogController extends Controller
 
         return view('user.katalog-sampah.index', compact('daftarSampah'));
     }
+     public function show($id)
+    {
+        $sampah = WasteCategory::findOrFail($id);
+        $averagePrice = \App\Models\SchedulePrice::where('waste_category_id', $id)->avg('price') ?: 1000;
+        return view('user.katalog-sampah.show', compact('sampah', 'averagePrice'));
+    }
 }

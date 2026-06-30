@@ -7,7 +7,9 @@ use App\Http\Controllers\SchedulePriceController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::view('/dashboard', 'officer.dashboard')->name('officer.dashboard');
+use App\Http\Controllers\OfficerController;
+
+Route::get('/dashboard', [OfficerController::class, 'index'])->name('officer.dashboard');
 Route::prefix('laporan')->group(function () {
 Route::get('/', [ReportController::class, 'index'])->name('officer.laporan.index');
     Route::get('/export/excel', [ReportController::class, 'exportExcel'])->name('officer.laporan.excel');

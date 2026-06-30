@@ -84,8 +84,8 @@
                         @forelse($recentTransactions ?? [] as $tx)
                             <tr>
                                 <td class="p-4 font-black text-slate-800 pl-6">#DTL-{{ $tx->id }}</td>
-                                <td class="p-4">{{ number_format($tx->total_weight, 2) }} Kg</td>
-                                <td class="p-4 text-emerald-600 font-bold">Rp {{ number_format($tx->total_amount, 0, ',', '.') }}</td>
+                                <td class="p-4">{{ number_format($tx->weight_kg, 2) }} Kg</td>
+                                <td class="p-4 text-emerald-600 font-bold">Rp {{ number_format($tx->total_price, 0, ',', '.') }}</td>
                             </tr>
                         @empty
                             <tr>

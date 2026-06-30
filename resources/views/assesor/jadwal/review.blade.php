@@ -21,9 +21,9 @@
             </h1>
             <p class="text-sm text-gray-300 flex items-center gap-2">
                 <x-mdi-calendar class="w-4 h-4 text-[#69C3C1]"/>
-                {{ \Carbon\Carbon::parse($schedule->pickup_date)->translatedFormat('l, d F Y') }}
+                {{ $schedule->start_date->translatedFormat('l, d F Y') }}
                 <x-mdi-clock-outline class="w-4 h-4 text-[#69C3C1] ml-2"/>
-                {{ \Carbon\Carbon::parse($schedule->pickup_date)->format('H.i') }} Wita
+                {{ $schedule->start_date->format('H.i') }} - {{ $schedule->finish_date->format('H.i') }} Wita
             </p>
         </div>
         <div class="text-right text-xs text-gray-400 font-medium">

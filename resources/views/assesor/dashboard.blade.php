@@ -88,15 +88,14 @@ else $greeting = "Malam";
                     {{-- Hari & Tanggal --}}
                     <div class="flex items-center gap-1">
                         <x-mdi-calendar class="w-5 h-5 text-[#69C3C1]"/>
-                        <span>{{ \Carbon\Carbon::parse($schedule->pickup_date)->translatedFormat('l, d F Y') }}</span>
+                        <span>{{ $schedule->start_date->translatedFormat('l, d F Y') }}</span>
                     </div>
 
                     {{-- Jam Operasional Penjemputan --}}
                     <div class="flex items-center gap-1 ml-2">
                         <x-mdi-clock-outline class="w-5 h-5 text-[#69C3C1]"/>
                         <span>
-                            {{ \Carbon\Carbon::parse($schedule->pickup_date)->format('H.i') }} 
-                            @if($schedule->end_time) - {{ \Carbon\Carbon::parse($schedule->end_time)->format('H.i') }} @endif Wita
+                           {{ $schedule->start_date->format('H.i') }} - {{ $schedule->finish_date->format('H.i') }} Wita
                         </span>
                     </div>
 

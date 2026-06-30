@@ -58,7 +58,7 @@
                     <div class="flex items-center gap-2">
                         <x-mdi-calendar class="w-5 h-5 text-[#69C3C1] shrink-0"/>
                         <span class="font-semibold text-slate-700">
-                            {{ \Carbon\Carbon::parse($schedule->pickup_date)->translatedFormat('l, d F Y') }}
+                            {{ $schedule->start_date->translatedFormat('l, d F Y') }}
                         </span>
                     </div>
 
@@ -66,7 +66,7 @@
                     <div class="flex items-center gap-2">
                         <x-mdi-clock-outline class="w-5 h-5 text-[#69C3C1] shrink-0"/>
                         <span class="font-medium">
-                            {{ \Carbon\Carbon::parse($schedule->pickup_date)->format('H.i') }} Wita
+                            {{ $schedule->start_date->format('H.i') }} - {{ $schedule->finish_date->format('H.i') }} Wita
                         </span>
                     </div>
 

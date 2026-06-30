@@ -37,7 +37,51 @@ class ReportController extends Controller
 
         return view('officer.laporan.index', compact('reports', 'totalMassa', 'totalKas', 'totalTransaksi'));
     }
+        // Export Seluruh Laporan Berdasarkan Filter ke Excel
+    public function exportExcel(Request $request)
+    {
+        $query = WasteDeposit::with(['user', 'dropOffPoint', 'officer'])
+            ->withSum('depositDetails as total_weight', 'weight_kg')
+            ->withSum('depositDetails as total_price', 'total_price')
+            ->withCount('depositDetails as total_items');
 
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('deposit_date', [$request->start_date . ' 00:00:00', $request->end_date . ' 23:59:59']);
+        }
+
+        $reports = $query->latest('deposit_date')->get();
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Rekap_Laporan_Transaksi.xls"');
+        header('Cache-Control: max-age=0');
+
+        echo '
+        <table border="1">
+            <tr><td colspan="7" style="font-weight:bold; text-align:center; background-color:#2D333D; color:white; height:30px;">REKAP JURNAL MONITORING SETORAN SAMPAH</td></tr>
+            <tr style="background-color: #69C3C1; color: white; font-weight: bold;">
+                <th>ID Transaksi</th>
+                <th>Tanggal Setor</th>
+                <th>Nama Nasabah</th>
+                <th>Lokasi Drop-Off</th>
+                <th>Petugas Penginput</th>
+                <th>Total Muatan (Kg)</th>
+                <th>Total Kas Keluar</th>
+            </tr>';
+
+        foreach($reports as $item) {
+            echo '<tr>
+                <td>#TRX-'.$item->id.'</td>
+                <td>'.\Carbon\Carbon::parse($item->deposit_date)->format('d-m-Y H:i').'</td>
+                <td>'.($item->user->name ?? "Masyarakat Umum").'</td>
+                <td>'.($item->dropOffPoint->name ?? "-").'</td>
+                <td>'.($item->officer->name ?? "-").'</td>
+                <td>'.number_format($item->total_weight ?? 0, 2, ",", ".").' Kg</td>
+                <td>Rp '.number_format($item->total_price ?? 0, 0, ",", ".").'</td>
+            </tr>';
+        }
+        echo '</table>';
+        exit;
+    }
     // Menampilkan Halaman Detail Transaksi Terpisah (Dedicated Page)
     public function showPage($id)
     {

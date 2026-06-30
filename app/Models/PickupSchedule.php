@@ -21,6 +21,10 @@ class PickupSchedule extends Model
   'status',
   'declined_reason'
     ];
+    protected $casts = [
+        'start_date' => 'datetime',
+        'finish_date' => 'datetime',
+    ];
 
     // Diubah menjadi dropOffPoint (tunggal) karena belongsTo hanya mengembalikan 1 objek lokasi
     public function dropOffPoint(): BelongsTo
