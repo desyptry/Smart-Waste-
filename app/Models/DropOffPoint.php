@@ -36,4 +36,8 @@ class DropOffPoint extends Model
         // Parameter kedua ('assesor_id') ditulis opsional jika nama kolomnya sudah sesuai konvensi
         return $this->belongsTo(User::class, 'assesor_id');
     }
+    public function officers(): HasMany
+    {
+        return $this->hasMany(OfficerDetail::class, 'collection_point_id');
+    }
 }

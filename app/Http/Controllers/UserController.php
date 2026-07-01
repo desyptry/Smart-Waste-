@@ -29,7 +29,19 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = Hash::make($data['password']);
         $data['status'] = $data['status'] ?? 'active';
-        User::create($data);
+        $user = User::create($data);
+
+        if ($user->role === 'officer') {
+            \App\Models\OfficerDetail::firstOrCreate([
+                'user_id' => $user->id
+            ]);
+        } elseif ($user->role === 'citizen') {
+            \App\Models\CitizenDetail::firstOrCreate([
+                'user_id' => $user->id
+            ], [
+                'balance' => 0
+            ]);
+        }
 
         return redirect()->route('admin.user.index')->with('success', 'User berhasil ditambahkan.');
     }
@@ -51,7 +63,17 @@ class UserController extends Controller
             $data['password'] = Hash::make($request->password);
         }
         $user->update($data);
-
+        if ($user->role === 'officer') {
+            \App\Models\OfficerDetail::firstOrCreate([
+                'user_id' => $user->id
+            ]);
+        } elseif ($user->role === 'citizen') {
+            \App\Models\CitizenDetail::firstOrCreate([
+                'user_id' => $user->id
+            ], [
+                'balance' => 0
+            ]);
+        }
         return redirect()->route('admin.user.index')->with('success', 'User berhasil diperbarui.');
     }
 

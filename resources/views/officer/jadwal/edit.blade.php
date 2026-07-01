@@ -28,8 +28,8 @@
                 <select name="collection_point_id" required class="w-full px-6 py-4 bg-[#F8FAFC] border-2 @error('collection_point_id') border-red-400 @else border-transparent @enderror rounded-2xl font-bold text-slate-700 outline-none transition-all duration-300 focus:bg-white focus:border-[#69C3C1] focus:ring-4 focus:ring-[#69C3C1]/10">
                     <option value="" disabled>Pilih Titik Kumpul Penugasan...</option>
                     @forelse($dropOffPoints as $point)
-                        <option value="{{ $point->id }}" 
-                            {{ old('collection_point_id', $schedule->collection_point_id) == $point->id ? 'selected' : '' }}>
+                        <option value="{{ $point->dropOffPoint->id }}" 
+                            {{ old('collection_point_id', $schedule->collection_point_id) == $point->dropOffPoint->id ? 'selected' : '' }}>
                             {{ $point->dropOffPoint->name }} {{ $point->dropOffPoint->location ? "— (".$point->dropOffPoint->location.")" : '' }}
                         </option>
                     @empty

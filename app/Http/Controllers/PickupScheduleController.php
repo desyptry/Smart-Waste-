@@ -171,6 +171,7 @@ public function store(PickupScheduleRequest $request)
             ]);
 
             // 2. Loop & Simpan ke tabel Anak (deposit_details)
+            $totalDepositValue = 0;
             foreach ($validated['items'] as $item) {
                 DepositDetail::create([
                     'waste_deposit_id' => $deposit->id,
@@ -178,11 +179,19 @@ public function store(PickupScheduleRequest $request)
                     'weight_kg'        => $item['weight_kg'],
                     'total_price'      => $item['total_price'],
                 ]);
+                $totalDepositValue += $item['total_price'];
             }
-
+             // 3. Update saldo digital nasabah (CitizenDetail)
+            $citizenDetail = \App\Models\CitizenDetail::firstOrCreate(
+                ['user_id' => $validated['user_id']],
+                ['balance' => 0]
+            );
+            $citizenDetail->balance += $totalDepositValue;
+            $citizenDetail->save();
             DB::commit();
             return redirect()->route('officer.jadwal.detail', $id)
-                             ->with('success', 'Transaksi setoran nasabah berhasil disimpan dan masuk log timbangan!');
+                              ->with('success', 'Transaksi setoran nasabah berhasil disimpan, masuk log timbangan, dan saldo nasabah bertambah!');
+
 
         } catch (\Exception $e) {
             DB::rollBack();

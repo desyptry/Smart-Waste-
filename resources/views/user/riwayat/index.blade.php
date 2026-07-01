@@ -15,10 +15,10 @@
             
             <!-- Filter Sederhana -->
             <div class="flex gap-2">
-                <select class="bg-white border border-gray-200 text-sm rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-(--primary)">
-                    <option>Semua Transaksi</option>
-                    <option>Masuk (Setor Sampah)</option>
-                    <option>Keluar (Pencairan)</option>
+                <select class="bg-white border border-gray-200 text-sm rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-(--primary)" id="filter-transaksi" onchange="filterTransaksi()">
+                    <option value="semua">Semua Transaksi</option>
+                    <option value="masuk">Masuk (Setor Sampah)</option>
+                    <option value="keluar">Keluar (Pencairan)</option>
                 </select>
             </div>
         </div>
@@ -35,46 +35,9 @@
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Jumlah</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @php
-                            $transaksi = [
-                                [
-                                    'tipe' => 'masuk',
-                                    'judul' => 'Kaleng - 10Kg',
-                                    'sub' => 'Balai Br. Ambengan',
-                                    'tgl' => '27 Maret 2026',
-                                    'status' => 'Berhasil',
-                                    'nominal' => '+12.500'
-                                ],
-                                [
-                                    'tipe' => 'keluar',
-                                    'judul' => 'Pencairan Saldo',
-                                    'sub' => 'Bank Transfer - BCA',
-                                    'tgl' => '25 Maret 2026',
-                                    'status' => 'Proses',
-                                    'nominal' => '-50.000'
-                                ],
-                                [
-                                    'tipe' => 'masuk',
-                                    'judul' => 'Kardus 10Kg',
-                                    'sub' => 'Lapangan Renon',
-                                    'tgl' => '20 Maret 2026',
-                                    'status' => 'Berhasil',
-                                    'nominal' => '+8.200'
-                                ],
-                                [
-                                    'tipe' => 'keluar',
-                                    'judul' => 'Pencairan Saldo',
-                                    'sub' => 'E-Wallet - OVO',
-                                    'tgl' => '15 Maret 2026',
-                                    'status' => 'Berhasil',
-                                    'nominal' => '-20.000'
-                                ],
-                            ];
-                        @endphp
-
-                        @foreach($transaksi as $t)
-                        <tr class="hover:bg-gray-50 transition-colors group cursor-pointer">
+                    <tbody class="divide-y divide-gray-100" id="tabel-body-transaksi">
+                        @forelse($transaksi as $t)
+                        <tr class="hover:bg-gray-50 transition-colors group cursor-pointer row-transaksi" data-tipe="{{ $t['tipe'] }}">
                             <td class="px-6 py-5">
                                 <div class="flex items-center gap-4">
                                     <div class="p-3 rounded-2xl {{ $t['tipe'] == 'masuk' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600' }}">
@@ -95,7 +58,7 @@
                             </td>
                             <td class="px-6 py-5">
                                 <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider 
-                                    {{ $t['status'] == 'Berhasil' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600' }}">
+                                    {{ $t['status'] == 'Berhasil' ? 'bg-green-100 text-green-600' : ($t['status'] == 'Ditolak' ? 'bg-red-100 text-red-600' : 'bg-orange-100 text-orange-600') }}">
                                     {{ $t['status'] }}
                                 </span>
                             </td>
@@ -105,25 +68,61 @@
                                 </p>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr id="empty-row-transaksi">
+                            <td colspan="4" class="text-center text-sm text-gray-500 py-6">Belum ada transaksi recorded.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
             
-            <!-- Pagination Sederhana -->
+             <!-- Info Jumlah Transaksi -->
             <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
-                <p class="text-xs text-gray-500">Menampilkan 4 dari 24 transaksi</p>
-                <div class="flex gap-2">
-                    <button class="p-2 border border-gray-200 rounded-lg hover:bg-white transition-colors">
-                        <x-mdi-chevron-left class="w-4 h-4 text-gray-400"/>
-                    </button>
-                    <button class="p-2 border border-gray-200 rounded-lg hover:bg-white transition-colors">
-                        <x-mdi-chevron-right class="w-4 h-4 text-gray-400"/>
-                    </button>
-                </div>
+                <p class="text-xs text-gray-500" id="info-jumlah">Menampilkan {{ count($transaksi) }} transaksi</p>
             </div>
         </div>
 
     </div>
 </div>
+<script>
+    function filterTransaksi() {
+        const value = document.getElementById('filter-transaksi').value;
+        const rows = document.querySelectorAll('.row-transaksi');
+        let countVisible = 0;
+        
+        rows.forEach(row => {
+            if (value === 'semua' || row.getAttribute('data-tipe') === value) {
+                row.style.display = '';
+                countVisible++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        
+        const emptyRow = document.getElementById('empty-row-transaksi');
+        if (countVisible === 0 && rows.length > 0) {
+            if (!emptyRow) {
+                const tr = document.createElement('tr');
+                tr.id = 'empty-row-transaksi';
+                tr.innerHTML = '<td colspan="4" class="text-center text-sm text-gray-500 py-6">Tidak ada transaksi yang cocok dengan filter.</td>';
+                document.getElementById('tabel-body-transaksi').appendChild(tr);
+            } else {
+                emptyRow.style.display = '';
+                emptyRow.querySelector('td').textContent = 'Tidak ada transaksi yang cocok dengan filter.';
+            }
+        } else {
+            if (emptyRow) {
+                if (rows.length === 0) {
+                    emptyRow.style.display = '';
+                    emptyRow.querySelector('td').textContent = 'Belum ada transaksi recorded.';
+                } else {
+                    emptyRow.style.display = 'none';
+                }
+            }
+        }
+        
+        document.getElementById('info-jumlah').textContent = 'Menampilkan ' + countVisible + ' transaksi';
+    }
+</script>
 @endsection

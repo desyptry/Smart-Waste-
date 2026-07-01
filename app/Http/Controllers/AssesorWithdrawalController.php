@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Withdrawal;
+use App\Models\CitizenDetail;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -36,18 +37,23 @@ class AssesorWithdrawalController extends Controller
 
             return redirect()->route('assesor.withdrawal')->with('success', 'Status pencairan dana berhasil diperbarui menjadi APPROVED.');
         }
+        if ($request->action === 'reject') {
+            $request->validate([
+                'rejection_reason' => 'required|string|max:255'
+            ]);
+            withdrawal->update([
+                'status' => 'rejected',
+                'rejection_reason' => $request->rejection_reason
+            ]);
 
-        // if ($request->action === 'reject') {
-        //     $request->validate([
-        //         'rejection_reason' => 'required|string|max:255'
-        //     ]);
+            // Refund the citizen's balance
+            $citizenDetail = CitizenDetail::where('user_id', $withdrawal->user_id)->first();
+            if ($citizenDetail) {
+                $citizenDetail->balance += $withdrawal->amount;
+                $citizenDetail->save();
+            }
 
-        //     $withdrawal->update([
-        //         'status' => 'rejected',
-        //         'rejection_reason' => $request->rejection_reason
-        //     ]);
-
-        //     return redirect()->route('assesor.withdrawal.index')->with('error', 'Pencairan dana ditolak.');
-        // }
+            return redirect()->route('assesor.withdrawal')->with('success', 'Pencairan dana ditolak. Saldo berhasil dikembalikan ke nasabah.');
+        }
     }
 }
