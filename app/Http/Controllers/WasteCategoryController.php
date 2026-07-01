@@ -17,10 +17,13 @@ class WasteCategoryController extends Controller
     public function store(WasteCategoryRequest $request)
     {
         $data = $request->validated();
+        
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('waste-categories', 'public');
         }
+        
         WasteCategory::create($data);
+        
         return redirect()->route('admin.kategori.index')
                          ->with('success', 'Kategori berhasil ditambahkan.');
     }
@@ -28,13 +31,16 @@ class WasteCategoryController extends Controller
     public function update(WasteCategoryRequest $request, WasteCategory $wasteCategory)
     {
         $data = $request->validated();
+        
         if ($request->hasFile('photo')) {
             if ($wasteCategory->photo) {
                 Storage::disk('public')->delete($wasteCategory->photo);
             }
             $data['photo'] = $request->file('photo')->store('waste-categories', 'public');
         }
+        
         $wasteCategory->update($data);
+        
         return redirect()->route('admin.kategori.index')
                          ->with('success', 'Kategori diperbarui.');
     }
@@ -42,9 +48,12 @@ class WasteCategoryController extends Controller
     public function destroy(WasteCategory $wasteCategory)
     {
         if ($wasteCategory->photo) {
-        Storage::disk('public')->delete($wasteCategory->photo);
+            Storage::disk('public')->delete($wasteCategory->photo);
+        }
+        
+        $wasteCategory->delete();
+        
+        return redirect()->route('admin.kategori.index')
+                         ->with('success', 'Kategori dihapus.');
     }
-    $wasteCategory->delete();
-    return redirect()->route('admin.kategori.index')->with('success', 'Kategori dihapus');
-}
 }

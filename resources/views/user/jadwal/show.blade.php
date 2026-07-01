@@ -71,7 +71,7 @@
                     @endforelse
                 </div>
 
-                <div class="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
+                <!-- <div class="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
                     <div class="flex items-center gap-3 mb-2">
                         <x-mdi-information-outline class="w-5 text-(--primary)"/>
                         <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Penting</span>
@@ -79,7 +79,7 @@
                     <p class="text-[11px] text-gray-300 leading-relaxed">
                         Harga dapat berubah sewaktu-waktu tergantung kebijakan bank sampah pusat. Pastikan sampah sudah dipilah sesuai jenisnya sebelum disetorkan.
                     </p>
-                </div>
+                </div> -->
             </div>
         </div>
 

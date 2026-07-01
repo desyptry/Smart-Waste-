@@ -17,7 +17,7 @@
             
             <!-- Bagian Foto (Kiri/Atas) -->
             <div class="md:w-1/2 h-72 md:h-auto relative">
-                <img src="{{ file_exists(public_path('images/' . $sampah->photo)) && $sampah->photo ? asset('images/' . $sampah->photo) : asset('images/kresek.jpg') }}" 
+                <img src="{{  $sampah->photo ? asset('storage/' . $sampah->photo) : asset('images/kresek.jpg') }}" 
                      alt="{{ $sampah->name }}" 
                      class="w-full h-full object-cover">
                 <div class="absolute top-4 left-4">

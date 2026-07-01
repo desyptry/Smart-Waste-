@@ -120,6 +120,7 @@ class CitizenController extends Controller
             ->where('status', 'verified')
             ->orderBy('start_date', 'asc')
             ->get();
+        // dd($jadwal);
         return view('user.jadwal.index', compact('jadwal'));
     }
     public function jadwalShow($id)

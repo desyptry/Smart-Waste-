@@ -112,10 +112,10 @@
                     </div>
                 </div>
                 <!-- History Status Penarikan -->
-                <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                {{-- <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
                     <h3 class="font-bold text-gray-800 text-sm mb-4 uppercase tracking-wider">Status Penarikan</h3>
                     <div class="space-y-4 max-h-[300px] overflow-y-auto pr-1">
-                        @forelse($withdrawals as $w)
+                        <!-- @forelse($withdrawals as $w) -->
                         <div class="flex justify-between items-start pb-3 border-b border-gray-100 last:border-0 last:pb-0">
                             <div>
                                 <p class="text-sm font-bold text-gray-800">{{ $w->account_name }}</p>
@@ -134,7 +134,7 @@
                         <p class="text-center text-xs text-gray-400 py-4">Belum ada riwayat penarikan.</p>
                         @endforelse
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

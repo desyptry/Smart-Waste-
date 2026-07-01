@@ -11,8 +11,6 @@ class AssesorScheduleController extends Controller
     public function index()
     {
         $assesorId = auth()->id();
-
-        // Mengambil jadwal berstatus 'not-verified' yang drop_off_point-nya di-assign ke assesor ini
         $schedules = PickupSchedule::with(['dropOffPoint'])
             ->where('status', 'not-verified')
             ->whereHas('dropOffPoint', function ($query) use ($assesorId) {
@@ -20,7 +18,6 @@ class AssesorScheduleController extends Controller
             })
             ->orderBy('updated_at', 'asc')
             ->get();
-
         return view('assesor.jadwal.index', compact('schedules'));
     }
 

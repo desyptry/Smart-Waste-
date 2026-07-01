@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('schedule_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pickup_schedule_id')->constrained()->onDelete('cascade');
-            $table->foreignId('waste_category_id')->constrained();
+            $table->foreignId('waste_category_id')->constrained()->onDelete('cascade');
             
             $table->integer('price'); 
 

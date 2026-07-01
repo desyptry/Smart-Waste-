@@ -31,7 +31,7 @@
             <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-shadow group">
                 <!-- Foto Sampah -->
                 <div class="h-48 w-full overflow-hidden relative">
-                    <img src="{{ asset('images/' . $sampah['photo']) }}" alt="{{ $sampah['name'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <img src="{{ asset('storage/' . $sampah['photo']) }}" alt="{{ $sampah['name'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute top-3 left-3">
                         {{-- <span class="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-(--secondary) shadow-sm">
                             {{ $sampah['category'] }}

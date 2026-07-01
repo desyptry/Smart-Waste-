@@ -12,21 +12,19 @@ class WasteCategoryRequest extends FormRequest
     }
 
     public function rules()
-    {
-        $rules = [
-            'name' => 'required|string|max:100|unique:waste_categories,name,' . $this->route('kategori'),
-            'description' => 'nullable|string',
-            'rules' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ];
+{
+    // Ambil ID dari route model binding 'wasteCategory'
+    // Jika di route kamu pakai nama lain (misal: 'kategori'), sesuaikan namanya.
+    $categoryId = $this->route('wasteCategory') ? $this->route('wasteCategory')->id : null;
 
-        if ($this->isMethod('patch') || $this->isMethod('put')) {
-            // update: photo tidak wajib
-            $rules['photo'] = 'nullable|image|mimes:jpeg,png,jpg|max:2048';
-        }
-
-        return $rules;
-    }
+    return [
+        // Abaikan ID data saat ini agar tidak memicu error 'unique'
+        'name' => 'required|string|max:100|unique:waste_categories,name,' . $categoryId,
+        'description' => 'nullable|string',
+        'rules' => 'nullable|string',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ];
+}
 
     public function messages()
     {
