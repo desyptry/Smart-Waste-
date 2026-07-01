@@ -6,41 +6,30 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PickupScheduleRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        
-        $user = $this->user();
-        return $user && in_array($user->role, ['admin', 'officer']);
+        return true; // Sudah diatur agar bisa diupload bebas
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
     public function rules(): array
     {
         return [
-            'drop_off_point_id' => 'required|exists:drop_off_points,id',
-            'date' => 'required|date|after_or_equal:today',
-            'start_time' => 'required',
-            'end_time' => 'required|after:start_time',
-            'status' => 'nullable|in:akan_datang,selesai',
+            // Sesuaikan dengan nama atribut 'name' di form HTML Anda
+            'collection_point_id' => 'required',
+            'start_date'          => 'required|date',
+            'finish_date'         => 'required|date|after:start_date',
         ];
     }
 
-  
     public function messages(): array
     {
         return [
-            'drop_off_point_id.required' => 'Posko wajib dipilih.',
-            'drop_off_point_id.exists' => 'Posko tidak valid.',
-            'date.required' => 'Tanggal wajib diisi.',
-            'date.after_or_equal' => 'Tanggal tidak boleh kurang dari hari ini.',
-            'start_time.required' => 'Waktu mulai wajib diisi.',
-            'end_time.required' => 'Waktu selesai wajib diisi.',
-            'end_time.after' => 'Waktu selesai harus setelah waktu mulai.',
+            'collection_point_id.required' => 'Titik kumpul/Posko wajib dipilih.',
+            'start_date.required'          => 'Waktu mulai wajib diisi.',
+            'start_date.date'              => 'Format waktu mulai tidak valid.',
+            'finish_date.required'         => 'Waktu selesai wajib diisi.',
+            'finish_date.date'             => 'Format waktu selesai tidak valid.',
+            'finish_date.after'            => 'Waktu selesai harus setelah waktu mulai.',
         ];
     }
 }

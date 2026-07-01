@@ -22,8 +22,9 @@ class OfficerDetail extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function collectionPoint(): BelongsTo
+    // Diubah menjadi camelCase tunggal agar konsisten
+    public function dropOffPoint(): BelongsTo
     {
-        return $this->belongsTo(CollectionPoint::class, 'collection_point_id');
+        return $this->belongsTo(DropOffPoint::class, 'collection_point_id');
     }
 }

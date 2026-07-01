@@ -28,7 +28,7 @@
 
         <!-- User -->
         <li>
-            <a href="{{ route('admin.user.index') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{ route('admin.user') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Kelola User</span>
                 <span class="link-icon hidden">
                 <x-mdi-account-group class="w-6 h-6"/>
@@ -46,7 +46,7 @@
 
         <!-- Posko -->
         <li>
-            <a href="/admin/posko" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{ route('admin.posko.index') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Data Posko</span>
                 <span class="link-icon hidden">
                     <x-mdi-office-building class="w-6 h-6"/>
@@ -57,7 +57,7 @@
 
         <!-- Laporan -->
         <li>
-            <a href="/admin/laporan" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{ route('admin.laporan.global') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Laporan</span>
                 <span class="link-icon hidden">
                     <x-mdi-chart-bar class="w-6 h-6"/>
@@ -67,7 +67,7 @@
 
         <!-- Konfigurasi -->
         <li>
-            <a href="/admin/konfigurasi" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
+            <a href="{{ route('admin.konfigurasi.index') }}" class="sidebar-link flex justify-center items-center w-full py-4 bg-white text-slate-900 font-black rounded-xl shadow-sm hover:bg-gray-100 transition-all text-lg overflow-hidden whitespace-nowrap">
                 <span class="link-text">Konfigurasi</span>
                 <span class="link-icon hidden">
                     <x-mdi-cog class="w-6 h-6"/>
@@ -78,10 +78,17 @@
     </ul>
 
     <!-- Logout -->
-    <div class="mt-auto pt-4 border-t border-gray-600">
-        <button class="w-full py-3 bg-red-500 rounded-xl font-bold">
-            <span class="link-text">Logout</span>
-        </button>
+        <div class="mt-auto pt-6 border-t border-slate-700">
+        <form action="{{ route('logout') }}" method="POST">
+    @csrf
+        
+            <button type="submit" class="flex items-center justify-center gap-3 w-full py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-all shadow-lg overflow-hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span class="link-text">Logout</span>
+            </button>
+        </form>
     </div>
 
 </div>

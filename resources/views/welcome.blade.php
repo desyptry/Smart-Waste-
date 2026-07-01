@@ -33,7 +33,7 @@
 
         <!-- Menu Navigation -->
         <ul id="menu" class="hidden absolute top-full left-0 w-full bg-white flex-col p-5 md:p-0 gap-2 shadow-xl md:shadow-none md:static md:w-auto md:bg-transparent md:flex md:flex-row md:gap-8 text-slate-800 font-bold items-center">
-            <li class="w-full md:w-auto text-center py-2 hover:text-[#69C3C1] transition-colors"><a href="#">Home</a></li>
+            <li class="w-full md:w-auto text-center py-2 hover:text-[#69C3C1] transition-colors"><a href="#">Dashboard</a></li>
             <li class="w-full md:w-auto text-center py-2 hover:text-[#69C3C1] transition-colors"><a href="#about-us">Tentang</a></li>
             <li class="w-full md:w-auto text-center py-2 hover:text-[#69C3C1] transition-colors"><a href="#faq">FAQ</a></li>
             <li class="w-full md:w-auto text-center py-2 hover:text-[#69C3C1] transition-colors"><a href="#location">Lokasi</a></li>
@@ -41,10 +41,10 @@
             <div class="h-[1px] w-full bg-gray-100 my-2 md:hidden"></div>
             
             <li class="w-full md:w-auto">
-                <a href="#" class="block text-center px-8 py-2.5 border-2 border-[#69C3C1] text-[#69C3C1] rounded-full hover:bg-[#69C3C1] hover:text-white transition-all font-bold">Daftar</a>
+                <a href="{{route('register')}}" class="block text-center px-8 py-2.5 border-2 border-[#69C3C1] text-[#69C3C1] rounded-full hover:bg-[#69C3C1] hover:text-white transition-all font-bold">Daftar</a>
             </li>
             <li class="w-full md:w-auto">
-                <a href="#" class="block text-center px-8 py-2.5 bg-[#69C3C1] text-white rounded-full hover:bg-[#58a8a6] shadow-lg shadow-cyan-100 transition-all font-bold">Login</a>
+                <a href="{{route('login')}}" class="block text-center px-8 py-2.5 bg-[#69C3C1] text-white rounded-full hover:bg-[#58a8a6] shadow-lg shadow-cyan-100 transition-all font-bold">Login</a>
             </li>
         </ul>
     </div>
@@ -64,15 +64,15 @@
                 </p>
                 
                 <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-4">
-                    <a href="{{route('daftar')}}" class="px-8 py-3 bg-[#69C3C1] hover:bg-[#58a8a6] text-white font-bold rounded-full transition-all shadow-lg shadow-cyan-100">
+                    <a href="{{route('register')}}" class="px-8 py-3 bg-[#69C3C1] hover:bg-[#58a8a6] text-white font-bold rounded-full transition-all shadow-lg shadow-cyan-100">
                         Mulai Mengolah Sampah
                     </a>
                     <a href="#about" class="px-8 py-3 bg-(--primary) hover:bg-[#a2c9aa] text-white font-bold rounded-full transition-all shadow-lg shadow-green-100">
                         Tentang Kami
                     </a>
+                  
                 </div>
             </div>
-
             <!-- Sisi Kanan: Image -->
             <div class="w-full md:w-1/2 relative flex justify-end">
                 <!-- Ilustrasi garis rumah di belakang (opsional/dekoratif) -->

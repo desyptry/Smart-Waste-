@@ -1,15 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WasteCatalogController;
+use App\Http\Controllers\CitizenController;
+use App\Http\Controllers\WithdrawalController;
 
-Route::view('/', 'user.index');
-    Route::view('/dashboard', 'user.dashboard.index')->name('user.dashboard');
-    Route::view('/pencairan', 'user.pencairan.index')->name('user.pencairan');
-    Route::view('/riwayat', 'user.riwayat.index')->name('user.riwayat');
-    Route::view('/jadwal', 'user.jadwal.index')->name('user.jadwal');
-    Route::view('/jadwal', 'user.jadwal.index')->name('user.jadwal');
-    Route::view('/jadwal/{i}', 'user.jadwal.show')->name('user.jadwal.show');
-    Route::view('/sampah/{i}', 'user.katalog-sampah.show')->name('user.sampah.show');
 
-    Route::get('/katalog-sampah', [WasteCatalogController::class, 'index'])->name('user.katalog-sampah');
+use Illuminate\Support\Facades\Route;
+// Route::view('/', 'user.index');
+Route::get('/dashboard', [CitizenController::class, 'dashboard'])->name('user.dashboard');
+Route::get('/pencairan', [WithdrawalController::class, 'index'])->name('user.pencairan');
+Route::post('/pencairan', [WithdrawalController::class, 'store'])->name('user.pencairan.store');
+Route::get('/riwayat', [CitizenController::class, 'riwayat'])->name('user.riwayat');
+Route::get('/jadwal', [CitizenController::class, 'jadwal'])->name('user.jadwal');
+Route::get('/jadwal/{id}', [CitizenController::class, 'jadwalShow'])->name('user.jadwal.show');
+Route::get('/katalog-sampah', [WasteCatalogController::class, 'index'])->name('user.katalog-sampah');
+Route::get('/sampah/{id}', [WasteCatalogController::class, 'show'])->name('user.sampah.show');

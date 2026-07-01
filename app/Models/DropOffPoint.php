@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DropOffPoint extends Model
 {
     use HasFactory;
@@ -18,6 +18,7 @@ class DropOffPoint extends Model
         'name',
         'location',
         'latitude',
+  'assesor_id',
         'longitude',
     ];
 
@@ -28,6 +29,15 @@ class DropOffPoint extends Model
     public function schedules(): HasMany
     {
         // Parameter kedua adalah nama foreign key di tabel schedules yang merujuk ke tabel ini
-        return $this->hasMany(Schedule::class, 'drop_off_point_id');
+        return $this->hasMany(Schedule::class, 'collection_point_id');
+    }
+  public function assesor(): BelongsTo
+    {
+        // Parameter kedua ('assesor_id') ditulis opsional jika nama kolomnya sudah sesuai konvensi
+        return $this->belongsTo(User::class, 'assesor_id');
+    }
+    public function officers(): HasMany
+    {
+        return $this->hasMany(OfficerDetail::class, 'collection_point_id');
     }
 }

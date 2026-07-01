@@ -7,13 +7,20 @@
         "dev": "vite"
     },
     "devDependencies": {
-        "@tailwindcss/vite": "^4.2.4",
-        "autoprefixer": "^10.5.0",
+        "@tailwindcss/forms": "^0.5.2",
+        "@tailwindcss/postcss": "^4.3.1",
+        "@tailwindcss/vite": "^4.3.1",
+        "alpinejs": "^3.4.2",
+        "autoprefixer": "^10.4.2",
         "concurrently": "^9.0.1",
         "jquery": "^4.0.0",
         "laravel-vite-plugin": "^3.0.0",
-        "postcss": "^8.5.13",
+        "postcss": "^8.4.31",
+        "tailwindcss": "^4.3.1",
         "vite": "^8.0.0"
+    },
+    "dependencies": {
+        "tailwind": "^4.0.0"
     },
     "name": "smartwaste",
     "version": "1.0.0",
@@ -32,9 +39,5 @@
     "bugs": {
         "url": "https://github.com/desyptry/Smart-Waste-/issues"
     },
-    "homepage": "https://github.com/desyptry/Smart-Waste-#readme",
-    "dependencies": {
-        "tailwind": "^4.0.0",
-        "tailwindcss": "^4.2.4"
-    }
+    "homepage": "https://github.com/desyptry/Smart-Waste-#readme"
 }

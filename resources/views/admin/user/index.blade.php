@@ -35,14 +35,20 @@
                         <td class="p-2">
                             @if($user->role == 'admin') Admin
                             @elseif($user->role == 'officer') Petugas
-                            @else Warga
+                            {{-- @else Warga --}}
+                             @elseif($user->role == 'assesor') Assesor
+                            @elseif($user->role == 'citizen') Warga
+                            @else {{ ucfirst($user->role) }}
                             @endif
                         </td>
                         <td class="p-2">{{ $user->address ?? '-' }}</td>
                         <td class="p-2">{{ $user->phone_number ?? '-' }}</td>
                         <td class="p-2">
-                            <span class="px-2 py-1 rounded text-xs {{ $user->status == 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                {{ $user->status == 'active' ? 'Aktif' : 'Nonaktif' }}
+                            <span class="px-2 py-1 rounded text-xs {{ $user->status == 'active' ? 'bg-green-100 text-green-700' : ($user->status == 'banned' ? 'bg-red-200 text-red-900' : 'bg-red-100 text-red-700') }}">
+                                @if($user->status == 'active') Aktif
+                                @elseif($user->status == 'banned') Diblokir
+                                @else Nonaktif
+                                @endif
                             </span>
                         </td>
                         <td class="p-2 whitespace-nowrap">
@@ -76,7 +82,8 @@
                 <select name="role" class="w-full border rounded p-1">
                     <option value="admin">Admin</option>
                     <option value="officer">Petugas</option>
-                    <option value="resident">Warga</option>
+                    <option value="citizen">Warga</option>
+                    <option value="assesor">Assesor</option>
                 </select>
             </div>
             <div class="mb-2"><label>Alamat</label><input type="text" name="address" class="w-full border rounded p-1"></div>
@@ -85,6 +92,7 @@
                 <select name="status" class="w-full border rounded p-1">
                     <option value="active">Aktif</option>
                     <option value="inactive">Nonaktif</option>
+                    <option value="banned">Diblokir</option>
                 </select>
             </div>
             <div class="flex justify-end gap-2 mt-4">
@@ -108,7 +116,9 @@
                 <select name="role" id="edit_role" class="w-full border rounded p-1">
                     <option value="admin">Admin</option>
                     <option value="officer">Petugas</option>
-                    <option value="resident">Warga</option>
+                    {{-- <option value="resident">Warga</option> --}}
+                    <option value="citizen">Warga</option>
+                    <option value="assesor">Assesor</option>
                 </select>
             </div>
             <div class="mb-2"><label>Alamat</label><input type="text" name="address" id="edit_address" class="w-full border rounded p-1"></div>
@@ -117,6 +127,7 @@
                 <select name="status" id="edit_status" class="w-full border rounded p-1">
                     <option value="active">Aktif</option>
                     <option value="inactive">Nonaktif</option>
+                    <option value="banned">Diblokir</option>
                 </select>
             </div>
             <div class="flex justify-end gap-2 mt-4">

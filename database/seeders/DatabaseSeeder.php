@@ -12,21 +12,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Data Statis User Admin Utama
-        User::create([
-            'name' => 'Admin SmartWaste',
-            'email' => 'admin@smartwaste.com',
-            'password' => bcrypt('password123'),
-        ]);
 
         // 2. Barisan Panggilan Seeder Terstruktur (Sangat Aman & Rapi!)
         $this->call([
+                    UserSeeder::class,
             SystemConfigurationSeeder::class, // 1. Bikin Konfigurasi Sistem Bawaan
             WasteCategorySeeder::class,       // 2. Bikin Kategori Master (Plastik, Kaca, dll)
             DropOffPointSeeder::class,        // 3. Bikin Posko Induk (Manggarai, Tebet, dll)
             PickupScheduleSeeder::class,      // 4. Bikin Petugas & Jadwal Penjemputan
             SchedulePriceSeeder::class,  // 5. Bikin Harga khusus berdasarkan Jadwal & Kategori
-               UserSeeder::class,
+               
             OfficerDetailSeeder::class,
             CitizenDetailSeeder::class,
             WasteDepositSeeder::class,
