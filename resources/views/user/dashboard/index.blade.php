@@ -20,7 +20,7 @@
                         <p class="font-semibold text-3xl md:text-4xl mt-1 tracking-tight">
                             <span class="text-lg font-normal">Rp</span>{{ number_format($balance, 0, ',', '.') }},-
                         </p>
-                        <a href="{{ route('user.pencairan') }}" class='inline-block mt-8 text-(--primary) font-bold text-sm border-b border-transparent hover:border-(--primary) transition-all'>
+                        <a href="{{ route('user.withdrawal') }}" class='inline-block mt-8 text-(--primary) font-bold text-sm border-b border-transparent hover:border-(--primary) transition-all'>
                             Ajukan Pencairan
                         </a>
                     </div>
